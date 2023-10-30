@@ -21,9 +21,11 @@ public class ProgHelperModule : EverestModule {
 
     public override void Load() {
         InputExtensions.Load();
+        PlayerExtensions.Load();
     }
 
     public override void Unload() {
         InputExtensions.Unload();
+        PlayerExtensions.Unload();
     }
 }

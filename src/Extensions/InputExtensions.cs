@@ -10,5 +10,5 @@ public static class InputExtensions {
 
     public static void Unload() => Celeste_Input_get_GrabCheck.Dispose();
 
-    private static bool Input_get_GrabCheck(Func<bool> grabCheck) => !ProgHelperModule.Session.TrueNoGrabEnabled && grabCheck();
+    private static bool Input_get_GrabCheck(Func<bool> grabCheck) => !ProgHelperModule.Session.DisableGrab && grabCheck();
 }

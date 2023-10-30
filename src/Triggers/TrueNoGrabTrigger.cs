@@ -6,11 +6,13 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/trueNoGrabTrigger")]
 public class TrueNoGrabTrigger : Trigger {
-    private bool newValue;
+    private bool disableGrab;
+    private bool bufferableGrab;
     private bool coversScreen;
     
     public TrueNoGrabTrigger(EntityData data, Vector2 offset) : base(data, offset) {
-        newValue = data.Bool("newValue");
+        disableGrab = data.Bool("disableGrab");
+        bufferableGrab = data.Bool("bufferableGrab");
         coversScreen = data.Bool("coversScreen");
     }
 
@@ -29,6 +31,8 @@ public class TrueNoGrabTrigger : Trigger {
 
     public override void OnEnter(Player player) {
         base.OnEnter(player);
-        ProgHelperModule.Session.TrueNoGrabEnabled = newValue;
+        ProgHelperModule.Session.DisableGrab = disableGrab;
+        ProgHelperModule.Session.BufferableGrab = bufferableGrab;
+        Input.Grab.BufferTime = bufferableGrab ? 0.08f : 0f;
     }
 }
