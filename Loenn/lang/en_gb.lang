@@ -1,1 +1,4 @@
-triggers.progHelper/trueNoGrabTrigger.placements.name.trigger=True No Grab Trigger
+entities.progHelper/adjustableFallingBlock.placements.name.block=Adjustable Falling Block
+
+triggers.progHelper/grabModifierTrigger.placements.name.trigger=Grab Modifier Trigger
+triggers.progHelper/wavedashProtectionTrigger.placements.name.trigger=Wavedash Protection Trigger

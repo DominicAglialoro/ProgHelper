@@ -4,13 +4,13 @@ using Monocle;
 
 namespace Celeste.Mod.ProgHelper; 
 
-[CustomEntity("progHelper/trueNoGrabTrigger")]
-public class TrueNoGrabTrigger : Trigger {
+[CustomEntity("progHelper/grabModifierTrigger")]
+public class GrabModifierTrigger : Trigger {
     private bool disableGrab;
     private bool bufferableGrab;
     private bool coversScreen;
     
-    public TrueNoGrabTrigger(EntityData data, Vector2 offset) : base(data, offset) {
+    public GrabModifierTrigger(EntityData data, Vector2 offset) : base(data, offset) {
         disableGrab = data.Bool("disableGrab");
         bufferableGrab = data.Bool("bufferableGrab");
         coversScreen = data.Bool("coversScreen");
@@ -22,7 +22,7 @@ public class TrueNoGrabTrigger : Trigger {
         if (!coversScreen)
             return;
 
-        var bounds = ((Level) scene).Bounds;
+        var bounds = SceneAs<Level>().Bounds;
         
         Position = new Vector2(bounds.X, bounds.Y - 24f);
         Collider.Width = bounds.Width;
