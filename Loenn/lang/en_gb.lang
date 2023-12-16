@@ -1,4 +1,5 @@
 entities.progHelper/adjustableFallingBlock.placements.name.block=Adjustable Falling Block
 
 triggers.progHelper/grabModifierTrigger.placements.name.trigger=Grab Modifier Trigger
+triggers.progHelper/qolModifierTrigger.placements.name.trigger=QOL Modifier Trigger
 triggers.progHelper/wavedashProtectionTrigger.placements.name.trigger=Wavedash Protection Trigger
