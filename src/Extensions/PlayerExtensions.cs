@@ -12,6 +12,7 @@ public static class PlayerExtensions {
         On.Celeste.Player.Jump += Player_Jump;
         On.Celeste.Player.SuperJump += Player_SuperJump;
         On.Celeste.Player.SuperWallJump += Player_SuperWallJump;
+        On.Celeste.Player.DashBegin += Player_DashBegin;
     }
 
     public static void Unload() {
@@ -20,6 +21,7 @@ public static class PlayerExtensions {
         On.Celeste.Player.Jump -= Player_Jump;
         On.Celeste.Player.SuperJump -= Player_SuperJump;
         On.Celeste.Player.SuperWallJump -= Player_SuperWallJump;
+        On.Celeste.Player.DashBegin -= Player_DashBegin;
     }
 
     private static void CheckForLiftboost(this Player player, Vector2 dir) {
@@ -68,5 +70,14 @@ public static class PlayerExtensions {
             player.CheckForLiftboost(-dir * (player.DashAttacking && player.DashDir.X == 0f && player.DashDir.Y == -1f ? 5 : 3) * Vector2.UnitX);
         
         superWallJump(player, dir);
+    }
+
+    private static void Player_DashBegin(On.Celeste.Player.orig_DashBegin dashBegin, Player player) {
+        if (ProgHelperModule.Session.UltraProtection
+            && player.DashDir.X != 0f && player.DashDir.Y > 0f && player.Speed.Y > 0f
+            && DynamicData.For(player).Get<bool>("onGround"))
+            player.Speed.X *= 1.2f;
+
+        dashBegin(player);
     }
 }
