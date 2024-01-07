@@ -31,16 +31,6 @@ public static class PlayerExtensions {
         On.Celeste.Player.DashBegin -= Player_DashBegin;
     }
 
-    private static void CheckForUltraBoost(this Player player) {
-        if (!ProgHelperModule.Session.UltraProtection || player.DashDir.X == 0f || player.DashDir.Y <= 0f || !player.OnGround())
-            return;
-        
-        player.DashDir.X = Math.Sign(player.DashDir.X);
-        player.DashDir.Y = 0f;
-        player.Speed.X *= 1.2f;
-        player.Ducking = true;
-    }
-
     private static void CheckForDisableCoyoteJump(this Player player) {
         if (player.CollideCheck<DisableCoyoteJumpTrigger>())
             DynamicData.For(player).Set("jumpGraceTimer", 0f);
@@ -73,10 +63,26 @@ public static class PlayerExtensions {
 
         cursor.Index = -1;
         cursor.GotoPrev(MoveType.After,
-            instr => instr.MatchCall<Actor>("MoveV"));
+            instr => instr.MatchCall<Actor>(nameof(Actor.MoveH)),
+            instr => instr.OpCode == OpCodes.Pop);
+        
+        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.EndTest)));
+        
+        cursor.GotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Beq_S);
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(PlayerExtensions).GetMethodUnconstrained(nameof(CheckForUltraBoost)));
+        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.BeginTestH)));
+        
+        cursor.GotoNext(MoveType.After,
+            instr => instr.MatchCall<Actor>(nameof(Actor.MoveV)),
+            instr => instr.OpCode == OpCodes.Pop);
+
+        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.EndTest)));
+        
+        cursor.GotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Beq_S);
+
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.BeginTestV)));
     }
 
     private static bool Player_WallJumpCheck(On.Celeste.Player.orig_WallJumpCheck wallJumpCheck, Player player, int dir) =>
@@ -86,6 +92,14 @@ public static class PlayerExtensions {
     private static void Player_Jump(On.Celeste.Player.orig_Jump jump, Player player, bool particles, bool playsfx) {
         if (ProgHelperModule.Session.LiftboostProtection)
             player.CheckForLiftboost(Vector2.UnitY);
+        
+        if (ProgHelperModule.Session.UltraProtection
+            && player.DashDir.X != 0f && player.DashDir.Y > 0f && player.Speed.Y > 0f
+            && DynamicData.For(player).Get<bool>("onGround")) {
+            player.DashDir.X = Math.Sign(player.DashDir.X);
+            player.DashDir.Y = 0f;
+            player.Speed.X *= 1.2f;
+        }
         
         jump(player, particles, playsfx);
     }
@@ -99,7 +113,7 @@ public static class PlayerExtensions {
 
     private static void Player_SuperWallJump(On.Celeste.Player.orig_SuperWallJump superWallJump, Player player, int dir) {
         if (ProgHelperModule.Session.LiftboostProtection)
-            player.CheckForLiftboost(-dir * (player.DashAttacking && player.DashDir.X == 0f && player.DashDir.Y == -1f ? 5 : 3) * Vector2.UnitX);
+            player.CheckForLiftboost(-5 * dir * Vector2.UnitX);
         
         superWallJump(player, dir);
     }

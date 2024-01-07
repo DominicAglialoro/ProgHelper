@@ -20,11 +20,13 @@ public class ProgHelperModule : EverestModule {
     }
 
     public override void Load() {
+        ActorExtensions.Load();
         InputExtensions.Load();
         PlayerExtensions.Load();
     }
 
     public override void Unload() {
+        ActorExtensions.Unload();
         InputExtensions.Unload();
         PlayerExtensions.Unload();
     }
