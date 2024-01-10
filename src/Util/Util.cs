@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
 using System.Reflection;
-using FMOD.Studio;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Celeste.Mod.ProgHelper; 
 

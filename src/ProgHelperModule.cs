@@ -15,7 +15,7 @@ public class ProgHelperModule : EverestModule {
         Logger.SetLogLevel(nameof(ProgHelperModule), LogLevel.Verbose);
 #else
         // release builds use info logging to reduce spam in log files
-        Logger.SetLogLevel(nameof(HeavenRushModule), LogLevel.Info);
+        Logger.SetLogLevel(nameof(ProgHelperModule), LogLevel.Info);
 #endif
     }
 
