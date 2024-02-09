@@ -5,7 +5,7 @@ using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.ProgHelper.Entities; 
+namespace Celeste.Mod.ProgHelper; 
 
 [CustomEntity("progHelper/adjustableFallingBlock"), Tracked]
 public class AdjustableFallingBlock : Solid {

@@ -1,4 +1,5 @@
 entities.progHelper/adjustableFallingBlock.placements.name.block=Adjustable Falling Block
+entities.progHelper/linearIntroCrusher.placements.name.block=Linear Intro Crusher
 
 triggers.progHelper/clipPreventionTrigger.placements.name.trigger=Clip Prevention Trigger
 triggers.progHelper/disableCoyoteJumpTrigger.placements.name.trigger=Disable Coyote Jump Trigger
