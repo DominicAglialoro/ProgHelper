@@ -13,7 +13,7 @@ public static class PlayerExtensions {
     
     public static void Load() {
         On.Celeste.Player.Added += Player_Added;
-        il_Celeste_Player_Orig_Update = new ILHook(typeof(Player).GetMethodUnconstrained(nameof(Player.orig_Update)), Il_Player_Orig_Update);
+        il_Celeste_Player_Orig_Update = new ILHook(typeof(Player).GetMethodUnconstrained(nameof(Player.orig_Update)), Player_Orig_Update_il);
         On.Celeste.Player.WallJumpCheck += Player_WallJumpCheck;
         On.Celeste.Player.Jump += Player_Jump;
         On.Celeste.Player.SuperJump += Player_SuperJump;
@@ -51,7 +51,7 @@ public static class PlayerExtensions {
         Input.Grab.BufferTime = ProgHelperModule.Session.BufferableGrab ? 0.08f : 0f;
     }
 
-    private static void Il_Player_Orig_Update(ILContext il) {
+    private static void Player_Orig_Update_il(ILContext il) {
         var cursor = new ILCursor(il);
 
         cursor.GotoNext(MoveType.After,
