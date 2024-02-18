@@ -31,9 +31,36 @@ public static class PlayerExtensions {
         On.Celeste.Player.DashBegin -= Player_DashBegin;
     }
 
-    private static void CheckForDisableCoyoteJump(this Player player) {
+    private static void CheckForDisableCoyoteJump(Player player) {
         if (player.CollideCheck<DisableCoyoteJumpTrigger>())
             DynamicData.For(player).Set("jumpGraceTimer", 0f);
+    }
+
+    private static Vector2 ApplyCameraConstraints(Vector2 value, Player player) {
+        if (!DynamicData.For(player).TryGet("cameraConstraints", out CameraConstraints cameraConstraints))
+            return value;
+
+        if (cameraConstraints.HasMinX)
+            value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
+        
+        if (cameraConstraints.HasMaxX)
+            value.X = Math.Min(value.X, player.Position.X + cameraConstraints.MaxX - 160f);
+        
+        if (cameraConstraints.HasMinY)
+            value.Y = Math.Max(value.Y, player.Position.Y + cameraConstraints.MinY - 90f);
+        
+        if (cameraConstraints.HasMaxY)
+            value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
+
+        if (!player.EnforceLevelBounds)
+            return value;
+
+        var bounds = player.SceneAs<Level>().Bounds;
+        
+        value.X = MathHelper.Clamp(value.X, bounds.Left, bounds.Right - 320f);
+        value.Y = MathHelper.Clamp(value.Y, bounds.Top, bounds.Bottom - 180f);
+
+        return value;
     }
 
     private static void CheckForLiftboost(this Player player, Vector2 dir) {
@@ -62,6 +89,11 @@ public static class PlayerExtensions {
         cursor.Emit(OpCodes.Call, typeof(PlayerExtensions).GetMethodUnconstrained(nameof(CheckForDisableCoyoteJump)));
 
         cursor.Index = -1;
+        cursor.GotoPrev(instr => instr.MatchCallvirt<Camera>("set_Position"));
+
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.Emit(OpCodes.Call, typeof(PlayerExtensions).GetMethodUnconstrained(nameof(ApplyCameraConstraints)));
+        
         cursor.GotoPrev(MoveType.After,
             instr => instr.MatchCall<Actor>(nameof(Actor.MoveH)),
             instr => instr.OpCode == OpCodes.Pop);

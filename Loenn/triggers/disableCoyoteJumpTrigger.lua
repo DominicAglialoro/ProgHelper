@@ -1,6 +1,4 @@
-local disableCoyoteJumpTrigger = {}
-
-disableCoyoteJumpTrigger.name = "progHelper/disableCoyoteJumpTrigger"
-disableCoyoteJumpTrigger.placements = { name = "trigger" }
-
-return disableCoyoteJumpTrigger
+return {
+	name = "progHelper/disableCoyoteJumpTrigger",
+	placements = { name = "default" }
+}

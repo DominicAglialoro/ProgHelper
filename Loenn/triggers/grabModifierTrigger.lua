@@ -1,13 +1,11 @@
-local grabModifierTrigger = {}
-
-grabModifierTrigger.name = "progHelper/grabModifierTrigger"
-grabModifierTrigger.placements = {
-	name = "trigger",
-	data = {
-		disableGrab = false,
-		bufferableGrab = false,
-		coversScreen = false
+return {
+	name = "progHelper/grabModifierTrigger",
+	placements = {
+		name = "default",
+		data = {
+			disableGrab = false,
+			bufferableGrab = false,
+			coversScreen = false
+		}
 	}
 }
-
-return grabModifierTrigger

@@ -1,6 +1,4 @@
-local wavedashProtectionTrigger = {}
-
-wavedashProtectionTrigger.name = "progHelper/wavedashProtectionTrigger"
-wavedashProtectionTrigger.placements = { name = "trigger" }
-
-return wavedashProtectionTrigger
+return {
+	name = "progHelper/wavedashProtectionTrigger",
+	placements = { name = "default" }
+}
