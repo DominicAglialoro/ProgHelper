@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper; 
 
 public static class PlatformExtensions {
     public static void Load() {
-        IL.Celeste.Platform.Update += Platform_Update_il;
+        On.Celeste.Platform.Update += Platform_Update;
         IL.Celeste.Platform.MoveH_float += PatchLiftspeedProtectionX;
         IL.Celeste.Platform.MoveH_float_float += PatchLiftspeedProtectionX;
         IL.Celeste.Platform.MoveV_float += PatchLiftspeedProtectionY;
@@ -20,7 +21,7 @@ public static class PlatformExtensions {
     }
 
     public static void Unload() {
-        IL.Celeste.Platform.Update -= Platform_Update_il;
+        On.Celeste.Platform.Update -= Platform_Update;
         IL.Celeste.Platform.MoveH_float -= PatchLiftspeedProtectionX;
         IL.Celeste.Platform.MoveH_float_float -= PatchLiftspeedProtectionX;
         IL.Celeste.Platform.MoveV_float -= PatchLiftspeedProtectionY;
@@ -33,30 +34,37 @@ public static class PlatformExtensions {
         IL.Celeste.Platform.MoveVCollideSolidsAndBounds_Level_float_bool_Action3 -= PatchLiftspeedProtectionY;
     }
 
-    private static void SetZeroLiftspeed(Platform platform) {
-        if (ProgHelperModule.Session.LiftboostProtection)
-            platform.LiftSpeed = Vector2.Zero;
+    private static float SetSafeLiftSpeedX(float value, Platform platform) {
+        if (!ProgHelperModule.Session.LiftboostProtection || value == 0f)
+            return value;
+        
+        var dynamicData = DynamicData.For(platform);
+        var safeLiftSpeed = dynamicData.Get<Vector2?>("safeLiftSpeed") ?? Vector2.Zero;
+
+        safeLiftSpeed.X = value;
+        dynamicData.Set("safeLiftSpeed", safeLiftSpeed);
+
+        return value;
     }
-    
-    private static Vector2 GetZeroLiftspeed(Vector2 value, Platform platform)
-        => ProgHelperModule.Session.LiftboostProtection ? platform.LiftSpeed : value;
 
-    private static float GetNewLiftspeedX(float value, Platform platform)
-        => ProgHelperModule.Session.LiftboostProtection && value == 0f ? platform.LiftSpeed.X : value;
-    
-    private static float GetNewLiftspeedY(float value, Platform platform)
-        => ProgHelperModule.Session.LiftboostProtection && value == 0f ? platform.LiftSpeed.Y : value;
+    private static float SetSafeLiftSpeedY(float value, Platform platform) {
+        if (!ProgHelperModule.Session.LiftboostProtection || value == 0f)
+            return value;
+        
+        var dynamicData = DynamicData.For(platform);
+        var safeLiftSpeed = dynamicData.Get<Vector2?>("safeLiftSpeed") ?? Vector2.Zero;
 
-    private static void Platform_Update_il(ILContext il) {
-        var cursor = new ILCursor(il);
+        safeLiftSpeed.Y = value;
+        dynamicData.Set("safeLiftSpeed", safeLiftSpeed);
 
-        cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(PlatformExtensions).GetMethodUnconstrained(nameof(SetZeroLiftspeed)));
+        return value;
+    }
 
-        cursor.GotoNext(instr => instr.MatchStfld<Platform>("LiftSpeed"));
+    private static void Platform_Update(On.Celeste.Platform.orig_Update update, Platform platform) {
+        if (ProgHelperModule.Session.LiftboostProtection)
+            DynamicData.For(platform).Set("safeLiftSpeed", Vector2.Zero);
 
-        cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(PlatformExtensions).GetMethodUnconstrained(nameof(GetZeroLiftspeed)));
+        update(platform);
     }
 
     private static void PatchLiftspeedProtectionX(ILContext il) {
@@ -66,7 +74,7 @@ public static class PlatformExtensions {
             cursor.GotoNext(instr => instr.MatchStfld<Vector2>("X"));
 
             cursor.Emit(OpCodes.Ldarg_0);
-            cursor.Emit(OpCodes.Call, typeof(PlatformExtensions).GetMethodUnconstrained(nameof(GetNewLiftspeedX)));
+            cursor.Emit(OpCodes.Call, typeof(PlatformExtensions).GetMethodUnconstrained(nameof(SetSafeLiftSpeedX)));
         }
     }
     
@@ -77,7 +85,7 @@ public static class PlatformExtensions {
             cursor.GotoNext(instr => instr.MatchStfld<Vector2>("Y"));
 
             cursor.Emit(OpCodes.Ldarg_0);
-            cursor.Emit(OpCodes.Call, typeof(PlatformExtensions).GetMethodUnconstrained(nameof(GetNewLiftspeedY)));
+            cursor.Emit(OpCodes.Call, typeof(PlatformExtensions).GetMethodUnconstrained(nameof(SetSafeLiftSpeedY)));
         }
     }
 }

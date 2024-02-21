@@ -10,13 +10,15 @@ namespace Celeste.Mod.ProgHelper;
 
 public static class PlayerExtensions {
     private static ILHook il_Celeste_Player_Orig_Update;
+    private static ILHook il_Celeste_Player_Orig_WallJump;
     
     public static void Load() {
         On.Celeste.Player.Added += Player_Added;
-        il_Celeste_Player_Orig_Update = new ILHook(typeof(Player).GetMethodUnconstrained(nameof(Player.orig_Update)), Player_Orig_Update_il);
+        il_Celeste_Player_Orig_Update = new ILHook(typeof(Player).GetMethodUnconstrained(nameof(Player.orig_Update)), Player_orig_Update_il);
         On.Celeste.Player.WallJumpCheck += Player_WallJumpCheck;
         On.Celeste.Player.Jump += Player_Jump;
         On.Celeste.Player.SuperJump += Player_SuperJump;
+        il_Celeste_Player_Orig_WallJump = new ILHook(typeof(Player).GetMethodUnconstrained("orig_WallJump"), Player_orig_WallJump_il);
         On.Celeste.Player.SuperWallJump += Player_SuperWallJump;
         On.Celeste.Player.DashBegin += Player_DashBegin;
     }
@@ -27,6 +29,7 @@ public static class PlayerExtensions {
         On.Celeste.Player.WallJumpCheck -= Player_WallJumpCheck;
         On.Celeste.Player.Jump -= Player_Jump;
         On.Celeste.Player.SuperJump -= Player_SuperJump;
+        il_Celeste_Player_Orig_WallJump.Dispose();
         On.Celeste.Player.SuperWallJump -= Player_SuperWallJump;
         On.Celeste.Player.DashBegin -= Player_DashBegin;
     }
@@ -37,40 +40,53 @@ public static class PlayerExtensions {
     }
 
     private static Vector2 ApplyCameraConstraints(Vector2 value, Player player) {
-        if (!DynamicData.For(player).TryGet("cameraConstraints", out CameraConstraints cameraConstraints))
-            return value;
+        if (DynamicData.For(player).TryGet("cameraConstraints", out CameraConstraints cameraConstraints)) {
+            if (cameraConstraints.HasMinX)
+                value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
+            
+            if (cameraConstraints.HasMaxX)
+                value.X = Math.Min(value.X, player.Position.X + cameraConstraints.MaxX - 160f);
+            
+            if (cameraConstraints.HasMinY)
+                value.Y = Math.Max(value.Y, player.Position.Y + cameraConstraints.MinY - 90f);
+            
+            if (cameraConstraints.HasMaxY)
+                value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
+        }
 
-        if (cameraConstraints.HasMinX)
-            value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
-        
-        if (cameraConstraints.HasMaxX)
-            value.X = Math.Min(value.X, player.Position.X + cameraConstraints.MaxX - 160f);
-        
-        if (cameraConstraints.HasMinY)
-            value.Y = Math.Max(value.Y, player.Position.Y + cameraConstraints.MinY - 90f);
-        
-        if (cameraConstraints.HasMaxY)
-            value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
+        foreach (var entity in player.Scene.Tracker.GetEntities<CameraHardBorderTrigger>())
+            value = ((CameraHardBorderTrigger) entity).Constrain(value, player);
 
         if (!player.EnforceLevelBounds)
             return value;
 
         var bounds = player.SceneAs<Level>().Bounds;
-        
+
         value.X = MathHelper.Clamp(value.X, bounds.Left, bounds.Right - 320f);
         value.Y = MathHelper.Clamp(value.Y, bounds.Top, bounds.Bottom - 180f);
 
         return value;
     }
 
-    private static void CheckForLiftboost(this Player player, Vector2 dir) {
-        if (player.LiftSpeed != Vector2.Zero)
-            return;
+    private static bool TryGetPlatform(this Player player, Vector2 dir, out Platform platform) {
+        if (dir.X == 0f && dir.Y > 0f)
+            platform = player.CollideFirst<Platform>(player.Position + dir);
+        else
+            platform = player.CollideFirst<Solid>(player.Position + dir);
 
-        var solid = player.CollideFirst<Solid>(player.Position + dir);
+        return platform != null;
+    }
 
-        if (solid != null)
-            player.LiftSpeed = solid.LiftSpeed;
+    private static Vector2 GetWallJumpLiftSpeed(Vector2 value, Solid solid, int dir) {
+        if (!ProgHelperModule.Session.LiftboostProtection)
+            return value;
+        
+        var safeLiftSpeed = DynamicData.For(solid).Get<Vector2?>("safeLiftSpeed") ?? Vector2.Zero;
+
+        if (Math.Sign(safeLiftSpeed.X) == dir)
+            safeLiftSpeed.Y = 0f;
+
+        return safeLiftSpeed;
     }
 
     private static void Player_Added(On.Celeste.Player.orig_Added added, Player player, Scene scene) {
@@ -78,7 +94,7 @@ public static class PlayerExtensions {
         Input.Grab.BufferTime = ProgHelperModule.Session.BufferableGrab ? 0.08f : 0f;
     }
 
-    private static void Player_Orig_Update_il(ILContext il) {
+    private static void Player_orig_Update_il(ILContext il) {
         var cursor = new ILCursor(il);
 
         cursor.GotoNext(MoveType.After,
@@ -122,9 +138,10 @@ public static class PlayerExtensions {
         && (player.StateMachine.State != 2 || player.DashDir.Y <= 0f || !player.CollideCheck<WavedashProtectionTrigger>());
 
     private static void Player_Jump(On.Celeste.Player.orig_Jump jump, Player player, bool particles, bool playsfx) {
-        if (ProgHelperModule.Session.LiftboostProtection)
-            player.CheckForLiftboost(Vector2.UnitY);
-        
+        if (ProgHelperModule.Session.LiftboostProtection && player.LiftSpeed == Vector2.Zero
+                                                         && player.TryGetPlatform(Vector2.UnitY, out var platform))
+            player.LiftSpeed = DynamicData.For(platform).Get<Vector2?>("safeLiftSpeed") ?? Vector2.Zero;
+
         if (ProgHelperModule.Session.UltraProtection
             && player.DashDir.X != 0f && player.DashDir.Y > 0f && player.Speed.Y > 0f
             && DynamicData.For(player).Get<bool>("onGround")) {
@@ -137,15 +154,31 @@ public static class PlayerExtensions {
     }
 
     private static void Player_SuperJump(On.Celeste.Player.orig_SuperJump superJump, Player player) {
-        if (ProgHelperModule.Session.LiftboostProtection)
-            player.CheckForLiftboost(Vector2.UnitY);
+        if (ProgHelperModule.Session.LiftboostProtection && player.LiftSpeed == Vector2.Zero
+                                                         && player.TryGetPlatform(Vector2.UnitY, out var platform))
+            player.LiftSpeed = DynamicData.For(platform).Get<Vector2?>("safeLiftSpeed") ?? Vector2.Zero;
         
         superJump(player);
     }
 
+    private static void Player_orig_WallJump_il(ILContext il) {
+        var cursor = new ILCursor(il);
+
+        cursor.GotoNext(instr => instr.MatchCall<Actor>("set_LiftSpeed"));
+
+        cursor.Emit(OpCodes.Ldloc_2);
+        cursor.Emit(OpCodes.Ldarg_1);
+        cursor.Emit(OpCodes.Call, typeof(PlayerExtensions).GetMethodUnconstrained(nameof(GetWallJumpLiftSpeed)));
+    }
+
     private static void Player_SuperWallJump(On.Celeste.Player.orig_SuperWallJump superWallJump, Player player, int dir) {
-        if (ProgHelperModule.Session.LiftboostProtection)
-            player.CheckForLiftboost(-5 * dir * Vector2.UnitX);
+        if (ProgHelperModule.Session.LiftboostProtection && player.LiftSpeed == Vector2.Zero
+                                                         && player.TryGetPlatform(-5 * dir * Vector2.UnitX, out var platform)) {
+            var safeLiftSpeed = DynamicData.For(platform).Get<Vector2?>("safeLiftSpeed") ?? Vector2.Zero;
+
+            if (Math.Sign(safeLiftSpeed.X) == dir)
+                player.LiftSpeed = safeLiftSpeed.X * Vector2.UnitX;
+        }
         
         superWallJump(player, dir);
     }
