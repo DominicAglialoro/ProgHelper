@@ -5,9 +5,6 @@ namespace Celeste.Mod.ProgHelper;
 public class ProgHelperModule : EverestModule {
     public static ProgHelperModule Instance { get; private set; }
 
-    public override Type SessionType => typeof(RushHelperSession);
-    public static RushHelperSession Session => (RushHelperSession) Instance._Session;
-
     public ProgHelperModule() {
         Instance = this;
 #if DEBUG
@@ -21,15 +18,11 @@ public class ProgHelperModule : EverestModule {
 
     public override void Load() {
         ActorExtensions.Load();
-        InputExtensions.Load();
-        PlatformExtensions.Load();
         PlayerExtensions.Load();
     }
 
     public override void Unload() {
         ActorExtensions.Unload();
-        InputExtensions.Unload();
-        PlatformExtensions.Unload();
         PlayerExtensions.Unload();
     }
 }
