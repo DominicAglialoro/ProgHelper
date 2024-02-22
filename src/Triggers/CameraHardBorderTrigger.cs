@@ -27,6 +27,9 @@ public class CameraHardBorderTrigger : Entity {
     }
 
     public Vector2 Constrain(Vector2 cameraPosition, Player player) {
+        if (!string.IsNullOrWhiteSpace(flag) && SceneAs<Level>().Session.GetFlag(flag) == inverted)
+            return cameraPosition;
+        
         if (left && player.Right <= Left && player.Bottom > Top && player.Top < Bottom)
             cameraPosition.X = Math.Min(cameraPosition.X, Left - 320f);
         
