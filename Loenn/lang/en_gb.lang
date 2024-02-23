@@ -2,7 +2,8 @@ entities.progHelper/adjustableFallingBlock.placements.name.default=Adjustable Fa
 entities.progHelper/linearIntroCrusher.placements.name.default=Linear Intro Crusher
 
 triggers.progHelper/cameraConstraintTrigger.placements.name.default=Camera Constraint Trigger
-triggers.progHelper/cameraHardBorderTrigger.placements.name.default=Camera Hard Border Trigger
+triggers.progHelper/cameraHardBorder.placements.name.default=Camera Hard Border
 triggers.progHelper/clipPreventionTrigger.placements.name.default=Clip Prevention Trigger
+triggers.progHelper/colliderEnlarger.placements.name.default=Collider Enlarger
 triggers.progHelper/disableCoyoteJumpTrigger.placements.name.default=Disable Coyote Jump Trigger
 triggers.progHelper/wavedashProtectionTrigger.placements.name.default=Wavedash Protection Trigger

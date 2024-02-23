@@ -41,8 +41,8 @@ public static class PlayerExtensions {
                 value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
         }
 
-        foreach (var entity in player.Scene.Tracker.GetEntities<CameraHardBorderTrigger>())
-            value = ((CameraHardBorderTrigger) entity).Constrain(value, player);
+        foreach (var entity in player.Scene.Tracker.GetEntities<CameraHardBorder>())
+            value = ((CameraHardBorder) entity).Constrain(value, player);
 
         if (!player.EnforceLevelBounds)
             return value;

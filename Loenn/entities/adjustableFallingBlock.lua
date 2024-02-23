@@ -16,6 +16,6 @@ return {
 		}
 	},
 	fieldInformation = fakeTilesHelper.getFieldInformation("tiletype"),
-	depth = 0,
-	sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false)
+	sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),
+	depth = 0
 }

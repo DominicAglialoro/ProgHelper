@@ -16,12 +16,12 @@ return {
 		}
 	},
 	fieldInformation = fakeTilesHelper.getFieldInformation("tiletype"),
-	depth = 0,
 	sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),
 	nodeSprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),
 	nodeLineRenderType = "line",
 	nodeLimits = { 1, 1 },
-	nodeRectangle = (function(room, entity, node)
-			return utils.rectangle(node.x or 0, node.y or 0, entity.width or 8, entity.height or 8)
-		end)
+	nodeRectangle = function(room, entity, node)
+		return utils.rectangle(node.x or 0, node.y or 0, entity.width or 8, entity.height or 8)
+	end,
+	depth = 0
 }

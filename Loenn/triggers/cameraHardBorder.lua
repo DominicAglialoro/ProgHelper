@@ -1,5 +1,5 @@
 return {
-	name = "progHelper/cameraHardBorderTrigger",
+	name = "progHelper/cameraHardBorder",
 	placements = {
 		name = "default",
 		data = {
