@@ -15,5 +15,22 @@ return {
 			flag = "",
 			inverted = false
 		}
+	},
+	fieldOrder = {
+		"x",
+		"y",
+		"width",
+		"height",
+		"minX",
+		"maxX",
+		"minY",
+		"maxY",
+		"hasMinX",
+		"hasMaxX",
+		"hasMinY",
+		"hasMaxY",
+		"flag",
+		"inverted",
+		"onlyOnce"
 	}
 }

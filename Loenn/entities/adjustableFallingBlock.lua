@@ -15,6 +15,18 @@ return {
 			height = 8
 		}
 	},
+	fieldOrder = {
+		"x",
+		"y",
+		"width",
+		"height",
+		"delay",
+		"playerWait",
+		"tiletype",
+		"climbFall",
+		"checkAttached",
+		"behind"
+	},
 	fieldInformation = fakeTilesHelper.getFieldInformation("tiletype"),
 	sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),
 	depth = 0

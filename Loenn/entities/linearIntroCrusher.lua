@@ -15,6 +15,17 @@ return {
 			easingPeriod = 0
 		}
 	},
+	fieldOrder = {
+		"x",
+		"y",
+		"width",
+		"height",
+		"delay",
+		"speed",
+		"easingPeriod",
+		"tiletype",
+		"flags"
+	},
 	fieldInformation = fakeTilesHelper.getFieldInformation("tiletype"),
 	sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),
 	nodeSprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),

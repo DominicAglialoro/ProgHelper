@@ -9,5 +9,16 @@ return {
 			hitboxBottom = 0,
 			circleRadius = 0
 		}
+	},
+	fieldOrder = {
+		"x",
+		"y",
+		"width",
+		"height",
+		"hitboxLeft",
+		"hitboxRight",
+		"hitboxTop",
+		"hitboxBottom",
+		"circleRadius"
 	}
 }

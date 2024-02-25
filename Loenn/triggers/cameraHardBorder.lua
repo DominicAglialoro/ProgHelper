@@ -10,5 +10,17 @@ return {
 			flag = "",
 			inverted = false
 		}
+	},
+	fieldOrder = {
+		"x",
+		"y",
+		"width",
+		"height",
+		"left",
+		"right",
+		"top",
+		"bottom",
+		"flag",
+		"inverted"
 	}
 }

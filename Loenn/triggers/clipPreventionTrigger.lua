@@ -8,5 +8,15 @@ return {
 			up = false,
 			down = false
 		}
+	},
+	fieldOrder = {
+		"x",
+		"y",
+		"width",
+		"height",
+		"left",
+		"right",
+		"up",
+		"down"
 	}
 }
