@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using MonoMod.Utils;
 
-namespace Celeste.Mod.ProgHelper; 
+namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/cameraConstraintTrigger")]
 public class CameraConstraintTrigger : Trigger {
@@ -22,16 +22,18 @@ public class CameraConstraintTrigger : Trigger {
             MinY = 32f * data.Float("minY"),
             MaxY = 32f * data.Float("maxY")
         };
-        
+
         onlyOnce = data.Bool("onlyOnce");
         flag = data.Attr("flag");
         inverted = data.Bool("inverted");
     }
 
     public override void OnEnter(Player player) {
-        if (!string.IsNullOrWhiteSpace(flag) && SceneAs<Level>().Session.GetFlag(flag) == inverted)
+        base.OnEnter(player);
+
+        if (!Util.CheckFlag(flag, SceneAs<Level>().Session, inverted))
             return;
-        
+
         DynamicData.For(player).Set("cameraConstraints", constraints);
 
         if (onlyOnce)

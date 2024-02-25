@@ -6,4 +6,6 @@ triggers.progHelper/cameraHardBorder.placements.name.default=Camera Hard Border
 triggers.progHelper/clipPreventionTrigger.placements.name.default=Clip Prevention Trigger
 triggers.progHelper/colliderEnlarger.placements.name.default=Collider Enlarger
 triggers.progHelper/disableCoyoteJumpTrigger.placements.name.default=Disable Coyote Jump Trigger
+triggers.progHelper/setPlayerSpeedTrigger.placements.name.default=Set Player Speed Trigger
+triggers.progHelper/speedCameraOffsetTrigger.placements.name.default=Speed Camera Offset Trigger
 triggers.progHelper/wavedashProtectionTrigger.placements.name.default=Wavedash Protection Trigger
