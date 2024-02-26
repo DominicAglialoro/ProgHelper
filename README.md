@@ -2,7 +2,7 @@
 
 A Celeste helper mod containing various custom entities and triggers, most of which are intended to improve gameplay consistency and quality of life
 
-## Enties
+## Entities
 
 - **Adjustable Falling Block**: A Falling Block with a cusomizable delay and player wait time. Also adds the option to include attached platforms as part of itself when checking if the player is standing on it, so that the block falls early if the player jumps off of an attached platform
 
