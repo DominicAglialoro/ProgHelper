@@ -11,6 +11,7 @@ return {
 			offsetToX = 0,
 			offsetFromY = 0,
 			offsetToY = 0,
+			ignoreIfZero = false,
 			onlyOnce = false,
 			xOnly = false,
 			yOnly = false,
@@ -31,10 +32,11 @@ return {
 		"offsetToX",
 		"offsetFromY",
 		"offsetToY",
-		"flag",
-		"inverted",
-		"onlyOnce",
 		"xOnly",
 		"yOnly",
+		"ignoreIfZero",
+		"onlyOnce",
+		"flag",
+		"inverted",
 	}
 }

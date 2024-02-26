@@ -14,6 +14,7 @@ public class SpeedCameraOffsetTrigger : Trigger {
     private float offsetToX;
     private float offsetFromY;
     private float offsetToY;
+    private bool ignoreIfZero;
     private bool onlyOnce;
     private bool xOnly;
     private bool yOnly;
@@ -29,6 +30,7 @@ public class SpeedCameraOffsetTrigger : Trigger {
         offsetToX = 48f * data.Float("offsetToX");
         offsetFromY = 32f * data.Float("offsetFromY");
         offsetToY = 32f * data.Float("offsetToY");
+        ignoreIfZero = data.Bool("ignoreIfZero");
         onlyOnce = data.Bool("onlyOnce");
         xOnly = data.Bool("xOnly");
         yOnly = data.Bool("yOnly");
@@ -44,10 +46,10 @@ public class SpeedCameraOffsetTrigger : Trigger {
         if (!Util.CheckFlag(flag, level.Session, inverted))
             return;
 
-        if (!yOnly)
+        if (!yOnly && (!ignoreIfZero || player.Speed.X != 0f))
             level.CameraOffset.X = speedFromX != speedToX ? Calc.ClampedMap(player.Speed.X, speedFromX, speedToX, offsetFromX, offsetToX) : offsetFromX;
 
-        if (!xOnly)
+        if (!xOnly && (!ignoreIfZero || player.Speed.Y != 0f))
             level.CameraOffset.Y = speedFromY != speedToY ? Calc.ClampedMap(player.Speed.Y, speedFromY, speedToY, offsetFromY, offsetToY) : offsetFromY;
     }
 
