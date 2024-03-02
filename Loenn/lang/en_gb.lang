@@ -2,6 +2,11 @@ entities.progHelper/adjustableFallingBlock.placements.name.default=Adjustable Fa
 entities.progHelper/adjustableFallingBlock.placements.description.default=Falling Block with a cusomizable delay and player wait time
 entities.progHelper/adjustableFallingBlock.attributes.description.checkAttached=Check attached platforms when checking if the player is standing on this platform. Ensures that this platform falls sooner if the player jumps off of an attached platform
 
+entities.progHelper/crumbleBlockOnJump.placements.name.default=Crumble Block On Jump
+entities.progHelper/crumbleBlockOnJump.placements.description.default=Block that breaks after a delay when touched, or immediately when the player jumps off it
+entities.progHelper/crumbleBlockOnJump.attributes.description.delay=How long to wait to break after being touched. Set to a negative number to only break when the player jumps
+entities.progHelper/crumbleBlockOnJump.attributes.description.triggerOnLean=Whether to start the timer when the player presses against the side of the block without grabbing it
+
 entities.progHelper/linearIntroCrusher.placements.name.default=Linear Intro Crusher
 entities.progHelper/linearIntroCrusher.placements.description.default=Intro Crusher with linear movement
 entities.progHelper/linearIntroCrusher.attributes.description.easingPeriod=Fraction of the block's movement period during which it should accelerate, after which it moves linearly

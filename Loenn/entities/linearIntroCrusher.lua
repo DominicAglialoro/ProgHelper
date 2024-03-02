@@ -34,5 +34,5 @@ return {
 	nodeRectangle = function(room, entity, node)
 		return utils.rectangle(node.x or 0, node.y or 0, entity.width or 8, entity.height or 8)
 	end,
-	depth = 0
+	depth = -10501
 }
