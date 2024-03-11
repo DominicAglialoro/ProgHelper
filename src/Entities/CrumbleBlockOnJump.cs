@@ -5,7 +5,7 @@ using Monocle;
 
 namespace Celeste.Mod.ProgHelper;
 
-[CustomEntity("progHelper/crumbleBlockOnJump")]
+[CustomEntity("progHelper/crumbleBlockOnJump"), Tracked]
 public class CrumbleBlockOnJump : Solid {
     public bool Triggered;
 
@@ -28,7 +28,9 @@ public class CrumbleBlockOnJump : Solid {
         this.id = id;
         Depth = blendIn ? -10501 : -12999;
 
-        Add(new Coroutine(Sequence()));
+        if (delay >= 0f)
+            Add(new Coroutine(Sequence()));
+
         Add(new LightOcclude());
     }
 
@@ -57,14 +59,11 @@ public class CrumbleBlockOnJump : Solid {
 
     public override void OnStaticMoverTrigger(StaticMover sm) => Triggered = true;
 
-    private IEnumerator Sequence() {
-        while (!Triggered && !HasPlayerRider() && (!triggerOnLean || Input.MoveX == 0 || !CollideCheck<Player>(Position - Input.MoveX * Vector2.UnitX)))
-            yield return null;
+    public void Break() {
+        if (!Collidable)
+            return;
 
-        for (float time = delay; !Triggered && (time > 0f || delay < 0f); time -= Engine.DeltaTime)
-            yield return null;
-
-        Audio.Play(SFX.game_10_quake_rockbreak);
+        Audio.Play(SFX.game_10_quake_rockbreak, Position);
         Collidable = false;
 
         for (int i = 0; i < Width; i += 8) {
@@ -81,5 +80,15 @@ public class CrumbleBlockOnJump : Solid {
             DestroyStaticMovers();
 
         RemoveSelf();
+    }
+
+    private IEnumerator Sequence() {
+        while (!Triggered && !HasPlayerRider() && (!triggerOnLean || Input.MoveX == 0 || !CollideCheck<Player>(Position - Input.MoveX * Vector2.UnitX)))
+            yield return null;
+
+        for (float time = 0f; time < delay; time += Engine.DeltaTime)
+            yield return null;
+
+        Break();
     }
 }

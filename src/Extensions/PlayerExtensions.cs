@@ -31,12 +31,11 @@ public static class PlayerExtensions {
         On.Celeste.Player.SuperWallJump -= Player_SuperWallJump;
     }
 
-    private static void DestroyCrumbleBlockOnJump(this Player player, Vector2 dir) {
-        var solid = player.CollideFirst<Solid>(player.Position + dir);
+    private static void DestroyCrumbleBlockOnJump(this Player player, Vector2 dir)
+        => player.CollideFirst<CrumbleBlockOnJump>(player.Position + dir)?.Break();
 
-        if (solid is CrumbleBlockOnJump block)
-            block.Triggered = true;
-    }
+    private static void DestroyCrumbleJumpThruOnJump(this Player player)
+        => player.CollideFirstOutside<CrumbleJumpThruOnJump>(player.Position + Vector2.UnitY)?.Break();
 
     private static void CheckForDisableCoyoteJump(Player player) {
         if (player.CollideCheck<DisableCoyoteJumpTrigger>())
@@ -118,11 +117,13 @@ public static class PlayerExtensions {
     private static void Player_Jump(On.Celeste.Player.orig_Jump jump, Player player, bool particles, bool playsfx) {
         jump(player, particles, playsfx);
         player.DestroyCrumbleBlockOnJump(Vector2.UnitY);
+        player.DestroyCrumbleJumpThruOnJump();
     }
 
     private static void Player_SuperJump(On.Celeste.Player.orig_SuperJump superJump, Player player) {
         superJump(player);
         player.DestroyCrumbleBlockOnJump(Vector2.UnitY);
+        player.DestroyCrumbleJumpThruOnJump();
     }
 
     private static void Player_WallJump(On.Celeste.Player.orig_WallJump wallJump, Player player, int dir) {

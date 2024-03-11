@@ -7,6 +7,10 @@ entities.progHelper/crumbleBlockOnJump.placements.description.default=Block that
 entities.progHelper/crumbleBlockOnJump.attributes.description.delay=How long to wait to break after being touched. Set to a negative number to only break when the player jumps
 entities.progHelper/crumbleBlockOnJump.attributes.description.triggerOnLean=Whether to start the timer when the player presses against the side of the block without grabbing it
 
+entities.progHelper/crumbleJumpThruOnJump.placements.name.default=Crumble Jump Through On Jump
+entities.progHelper/crumbleJumpThruOnJump.placements.description.default=Jump through that breaks after a delay when touched, or immediately when the player jumps off it
+entities.progHelper/crumbleJumpThruOnJump.attributes.description.delay=How long to wait to break after being touched. Set to a negative number to only break when the player jumps
+
 entities.progHelper/linearIntroCrusher.placements.name.default=Linear Intro Crusher
 entities.progHelper/linearIntroCrusher.placements.description.default=Intro Crusher with linear movement
 entities.progHelper/linearIntroCrusher.attributes.description.easingPeriod=Fraction of the block's movement period during which it should accelerate, after which it moves linearly
