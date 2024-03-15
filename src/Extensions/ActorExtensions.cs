@@ -1,7 +1,7 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
-namespace Celeste.Mod.ProgHelper; 
+namespace Celeste.Mod.ProgHelper;
 
 public static class ActorExtensions {
     public static void Load() {
@@ -22,10 +22,10 @@ public static class ActorExtensions {
 
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.Emit(OpCodes.Ldloc_1);
-        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.CheckH)));
+        cursor.EmitCall(ClipPreventionTrigger.CheckH);
 
         var label = cursor.DefineLabel();
-        
+
         cursor.Emit(OpCodes.Brfalse_S, label);
         cursor.Emit(OpCodes.Ldc_I4_0);
         cursor.Emit(OpCodes.Ret);
@@ -40,10 +40,10 @@ public static class ActorExtensions {
 
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.Emit(OpCodes.Ldloc_1);
-        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.CheckV)));
-        
+        cursor.EmitCall(ClipPreventionTrigger.CheckV);
+
         var label = cursor.DefineLabel();
-        
+
         cursor.Emit(OpCodes.Brfalse_S, label);
         cursor.Emit(OpCodes.Ldc_I4_0);
         cursor.Emit(OpCodes.Ret);

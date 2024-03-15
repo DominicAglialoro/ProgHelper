@@ -9,10 +9,10 @@ using MonoMod.Utils;
 namespace Celeste.Mod.ProgHelper;
 
 public static class PlayerExtensions {
-    private static ILHook il_Celeste_Player_Orig_Update;
+    private static ILHook il_Celeste_Player_orig_Update;
 
     public static void Load() {
-        il_Celeste_Player_Orig_Update = new ILHook(typeof(Player).GetMethodUnconstrained(nameof(Player.orig_Update)), Player_orig_Update_il);
+        il_Celeste_Player_orig_Update = typeof(Player).CreateHook(nameof(Player.orig_Update), Player_orig_Update_il);
         On.Celeste.Player.WallJumpCheck += Player_WallJumpCheck;
         On.Celeste.Player.Jump += Player_Jump;
         On.Celeste.Player.SuperJump += Player_SuperJump;
@@ -22,7 +22,7 @@ public static class PlayerExtensions {
     }
 
     public static void Unload() {
-        il_Celeste_Player_Orig_Update.Dispose();
+        il_Celeste_Player_orig_Update.Dispose();
         On.Celeste.Player.WallJumpCheck -= Player_WallJumpCheck;
         On.Celeste.Player.Jump -= Player_Jump;
         On.Celeste.Player.SuperJump -= Player_SuperJump;
@@ -79,35 +79,35 @@ public static class PlayerExtensions {
             instr => instr.MatchStfld<Player>("jumpGraceTimer"));
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(PlayerExtensions).GetMethodUnconstrained(nameof(CheckForDisableCoyoteJump)));
+        cursor.EmitCall(CheckForDisableCoyoteJump);
 
         cursor.Index = -1;
         cursor.GotoPrev(instr => instr.MatchCallvirt<Camera>("set_Position"));
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(PlayerExtensions).GetMethodUnconstrained(nameof(ApplyCameraConstraints)));
+        cursor.EmitCall(ApplyCameraConstraints);
 
         cursor.GotoPrev(MoveType.After,
             instr => instr.MatchCall<Actor>(nameof(Actor.MoveH)),
             instr => instr.OpCode == OpCodes.Pop);
 
-        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.EndTest)));
+        cursor.EmitCall(ClipPreventionTrigger.EndTest);
 
         cursor.GotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Beq_S);
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.BeginTestH)));
+        cursor.EmitCall(ClipPreventionTrigger.BeginTestH);
 
         cursor.GotoNext(MoveType.After,
             instr => instr.MatchCall<Actor>(nameof(Actor.MoveV)),
             instr => instr.OpCode == OpCodes.Pop);
 
-        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.EndTest)));
+        cursor.EmitCall(ClipPreventionTrigger.EndTest);
 
         cursor.GotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Beq_S);
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(ClipPreventionTrigger).GetMethodUnconstrained(nameof(ClipPreventionTrigger.BeginTestV)));
+        cursor.EmitCall(ClipPreventionTrigger.BeginTestV);
     }
 
     private static bool Player_WallJumpCheck(On.Celeste.Player.orig_WallJumpCheck wallJumpCheck, Player player, int dir) =>
