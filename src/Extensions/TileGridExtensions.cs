@@ -85,9 +85,9 @@ public static class TileGridExtensions {
             return color;
 
         var modSession = ProgHelperModule.Session;
-        float alpha = 1f - MathHelper.Clamp(Util.Mod(tileGrid.Scene.TimeActive - pulseIndex * modSession.TilePulseStep, modSession.TilePulseInterval) / modSession.TilePulseLength, 0f, 1f);
+        float interp = 1f - MathHelper.Clamp(Util.Mod(tileGrid.Scene.TimeActive - pulseIndex * modSession.TilePulseStep, modSession.TilePulseInterval) / modSession.TilePulseLength, 0f, 1f);
 
-        return Util.MultiplyKeepAlpha(color, MathHelper.Lerp(modSession.TilePulseBaseBrightness, 1f, alpha * alpha));
+        return Util.MultiplyKeepAlpha(color, MathHelper.Lerp(modSession.TilePulseBaseBrightness, 1f, interp * interp));
     }
 
     private static void TileGrid_RenderAt_il(ILContext il) {
