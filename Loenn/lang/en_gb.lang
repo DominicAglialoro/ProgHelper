@@ -11,6 +11,10 @@ entities.progHelper/crumbleJumpThruOnJump.placements.name.default=Crumble Jump T
 entities.progHelper/crumbleJumpThruOnJump.placements.description.default=Jump through that breaks after a delay when touched, or immediately when the player jumps off it
 entities.progHelper/crumbleJumpThruOnJump.attributes.description.delay=How long to wait to break after being touched. Set to a negative number to only break when the player jumps
 
+entities.progHelper/tilePulseController.placements.name.default=Tile Pulse Controller
+
+entities.progHelper/tilePulseSource.placements.name.default=Tile Pulse Source
+
 entities.progHelper/linearIntroCrusher.placements.name.default=Linear Intro Crusher
 entities.progHelper/linearIntroCrusher.placements.description.default=Intro Crusher with linear movement
 entities.progHelper/linearIntroCrusher.attributes.description.easingPeriod=Fraction of the block's movement period during which it should accelerate, after which it moves linearly
