@@ -12,7 +12,7 @@ A Celeste helper mod containing various custom entities and triggers, most of wh
 
 - **Linear Intro Crusher**: An Intro Crusher with linear movement. Can also have a curve that starts accelerating and then becomes linear after a set period. The linear movement makes it easier to get maximum LiftBoost when jumping off of it
 
-- **Tule Pulse Controller / Tile Pulse Source**: Applies a pulsing light effect to contiguous groups of tiles
+- **Tile Pulse Controller / Tile Pulse Source**: Applies a pulsing light effect to contiguous groups of tiles
 
 ## Triggers
 

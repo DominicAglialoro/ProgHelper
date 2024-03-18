@@ -14,11 +14,16 @@ public static class TileGridExtensions {
     public static void Unload() => IL.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt_il;
 
     public static void GeneratePulseIndices(this TileGrid tileGrid, VirtualMap<char> tiles, bool bg) {
+        var level = tileGrid.SceneAs<Level>();
+
+        if (level == null)
+            return;
+
         var sources = new List<IntVector>();
         int width = tiles.Columns;
         int height = tiles.Rows;
 
-        foreach (var levelData in tileGrid.SceneAs<Level>().Session.MapData.Levels) {
+        foreach (var levelData in level.Session.MapData.Levels) {
             foreach (var entityData in levelData.Entities) {
                 if (entityData.Name != "progHelper/tilePulseSource" || entityData.Bool("bg") != bg)
                     continue;

@@ -1,5 +1,5 @@
 - Name: ProgHelper
-  Version: 1.1.0
+  Version: 1.1.1
   DLL: src/bin/net7/ProgHelper.dll
   Dependencies:
     - Name: Everest
