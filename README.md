@@ -6,7 +6,13 @@ A Celeste helper mod containing various custom entities and triggers, most of wh
 
 - **Adjustable Falling Block**: A Falling Block with a cusomizable delay and player wait time. Also adds the option to include attached platforms as part of itself when checking if the player is standing on it, so that the block falls early if the player jumps off of an attached platform
 
+- **Crumble Block On Jump**: A block that breaks after a delay when touched, or immediately when the player jumps off it
+
+- **Crumble Jump Through On Jump**: A jump through that breaks after a delay when touched, or immediately when the player jumps off it
+
 - **Linear Intro Crusher**: An Intro Crusher with linear movement. Can also have a curve that starts accelerating and then becomes linear after a set period. The linear movement makes it easier to get maximum LiftBoost when jumping off of it
+
+- **Tule Pulse Controller / Tile Pulse Source**: Applies a pulsing light effect to contiguous groups of tiles
 
 ## Triggers
 
