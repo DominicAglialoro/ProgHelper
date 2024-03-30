@@ -1,5 +1,19 @@
+entities.progHelper/adjustableBumper.placements.name.default=Adjustable Bumper
+entities.progHelper/adjustableBumper.placements.name.oneUse=Adjustable Bumper (One Use)
+entities.progHelper/adjustableBumper.placements.name.noDashRestore=Adjustable Bumper (No Dash Restore)
+entities.progHelper/adjustableBumper.placements.name.doubleDashRestore=Adjustable Bumper (Double Dash Restore)
+entities.progHelper/adjustableBumper.placements.description.default=Bumper with many adjustable parameters
+entities.progHelper/adjustableBumper.placements.description.oneUse=Bumper with many adjustable parameters
+entities.progHelper/adjustableBumper.placements.description.noDashRestore=Bumper with many adjustable parameters
+entities.progHelper/adjustableBumper.placements.description.doubleDashRestore=Bumper with many adjustable parameters
+entities.progHelper/adjustableBumper.attributes.description.sprite=The name of the sprite in Sprites.xml to use for the normal bumper. The fire bumper uses the name {sprite}_evil
+entities.progHelper/adjustableBumper.attributes.description.fireMode=When to switch this bumper to fire mode
+entities.progHelper/adjustableBumper.attributes.description.cardinal=Restrict bumper launch angles to the 4 cardinal directions, with equal hit angle windows
+entities.progHelper/adjustableBumper.attributes.description.snapUp=Adds a range of hit angles to the top of the bumper that will launch the player straight up
+entities.progHelper/adjustableBumper.attributes.description.snapDown=Adds a range of hit angles to the bottom of the bumper that will launch the player straight down
+
 entities.progHelper/adjustableFallingBlock.placements.name.default=Adjustable Falling Block
-entities.progHelper/adjustableFallingBlock.placements.description.default=Falling Block with a cusomizable delay and player wait time
+entities.progHelper/adjustableFallingBlock.placements.description.default=Falling Block with a customizable delay and player wait time
 entities.progHelper/adjustableFallingBlock.attributes.description.checkAttached=Check attached platforms when checking if the player is standing on this platform. Ensures that this platform falls sooner if the player jumps off of an attached platform
 
 entities.progHelper/crumbleBlockOnJump.placements.name.default=Crumble Block On Jump

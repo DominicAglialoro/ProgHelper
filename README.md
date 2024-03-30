@@ -4,6 +4,8 @@ A Celeste helper mod containing various custom entities and triggers, most of wh
 
 ## Entities
 
+- **Adjustable Bumper**: A bumper with many adjustable parameters, such as respawn time, dash restore count, and constrained angles
+
 - **Adjustable Falling Block**: A Falling Block with a cusomizable delay and player wait time. Also adds the option to include attached platforms as part of itself when checking if the player is standing on it, so that the block falls early if the player jumps off of an attached platform
 
 - **Crumble Block On Jump**: A block that breaks after a delay when touched, or immediately when the player jumps off it
