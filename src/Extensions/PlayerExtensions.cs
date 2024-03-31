@@ -89,9 +89,7 @@ public static class PlayerExtensions {
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(ClipPreventionTrigger.BeginTestH);
 
-        cursor.GotoNext(MoveType.After,
-            instr => instr.MatchCall<Actor>("MoveH"),
-            instr => instr.OpCode == OpCodes.Pop);
+        cursor.Index += 2;
 
         cursor.EmitCall(ClipPreventionTrigger.EndTest);
 
@@ -102,9 +100,7 @@ public static class PlayerExtensions {
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(ClipPreventionTrigger.BeginTestV);
 
-        cursor.GotoNext(MoveType.After,
-            instr => instr.MatchCall<Actor>("MoveV"),
-            instr => instr.OpCode == OpCodes.Pop);
+        cursor.Index += 2;
 
         cursor.EmitCall(ClipPreventionTrigger.EndTest);
 
