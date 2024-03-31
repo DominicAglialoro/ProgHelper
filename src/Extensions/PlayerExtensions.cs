@@ -75,39 +75,51 @@ public static class PlayerExtensions {
         var cursor = new ILCursor(il);
 
         cursor.GotoNext(MoveType.After,
+            instr => instr.MatchCall<Engine>("get_DeltaTime"),
             instr => instr.OpCode == OpCodes.Sub,
             instr => instr.MatchStfld<Player>("jumpGraceTimer"));
 
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(CheckForDisableCoyoteJump);
 
-        cursor.Index = -1;
-        cursor.GotoPrev(instr => instr.MatchCallvirt<Camera>("set_Position"));
-
-        cursor.Emit(OpCodes.Ldarg_0);
-        cursor.EmitCall(ApplyCameraConstraints);
-
-        cursor.GotoPrev(MoveType.After,
-            instr => instr.MatchCall<Actor>(nameof(Actor.MoveH)),
-            instr => instr.OpCode == OpCodes.Pop);
-
-        cursor.EmitCall(ClipPreventionTrigger.EndTest);
-
-        cursor.GotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Beq_S);
+        cursor.GotoNext(MoveType.After,
+            instr => instr.MatchLdfld<Player>("onCollideH"),
+            instr => instr.OpCode == OpCodes.Ldnull);
 
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(ClipPreventionTrigger.BeginTestH);
 
         cursor.GotoNext(MoveType.After,
-            instr => instr.MatchCall<Actor>(nameof(Actor.MoveV)),
+            instr => instr.MatchCall<Actor>("MoveH"),
             instr => instr.OpCode == OpCodes.Pop);
 
         cursor.EmitCall(ClipPreventionTrigger.EndTest);
 
-        cursor.GotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Beq_S);
+        cursor.GotoNext(MoveType.After,
+            instr => instr.MatchLdfld<Player>("onCollideV"),
+            instr => instr.OpCode == OpCodes.Ldnull);
 
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(ClipPreventionTrigger.BeginTestV);
+
+        cursor.GotoNext(MoveType.After,
+            instr => instr.MatchCall<Actor>("MoveV"),
+            instr => instr.OpCode == OpCodes.Pop);
+
+        cursor.EmitCall(ClipPreventionTrigger.EndTest);
+
+        ILLabel label = null;
+
+        cursor.GotoNext(instr => instr.MatchLdfld<Player>("ForceCameraUpdate"));
+        cursor.GotoNext(
+            instr => instr.MatchCallvirt<StateMachine>("get_State"),
+            instr => instr.MatchLdcI4(18));
+        cursor.GotoNext(instr => instr.MatchBneUn(out label));
+        cursor.GotoLabel(label);
+        cursor.GotoNext(instr => instr.MatchCallvirt<Camera>("set_Position"));
+
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.EmitCall(ApplyCameraConstraints);
     }
 
     private static bool Player_WallJumpCheck(On.Celeste.Player.orig_WallJumpCheck wallJumpCheck, Player player, int dir) =>
