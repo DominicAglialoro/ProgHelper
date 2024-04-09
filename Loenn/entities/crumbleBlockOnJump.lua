@@ -7,6 +7,7 @@ return {
 		data = {
 			tiletype = "3",
 			delay = 0.2,
+			breakSound = "event:/new_content/game/10_farewell/quake_rockbreak",
 			triggerOnLean = true,
 			permanent = false,
 			blendIn = false,
@@ -22,6 +23,7 @@ return {
 		"height",
 		"delay",
 		"tiletype",
+		"breakSound",
 		"triggerOnLean",
 		"permanent",
 		"blendIn",

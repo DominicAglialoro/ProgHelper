@@ -11,6 +11,7 @@ public class CrumbleBlockOnJump : Solid {
 
     private float delay;
     private char tileType;
+    private string breakSound;
     private bool triggerOnLean;
     private bool permanent;
     private bool blendIn;
@@ -20,6 +21,7 @@ public class CrumbleBlockOnJump : Solid {
     public CrumbleBlockOnJump(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset, data.Width, data.Height, false) {
         delay = data.Float("delay");
         tileType = data.Char("tiletype", '3');
+        breakSound = data.Attr("breakSound", SFX.game_10_quake_rockbreak);
         triggerOnLean = data.Bool("triggerOnLean");
         permanent = data.Bool("permanent");
         blendIn = data.Bool("blendIn");
@@ -63,7 +65,7 @@ public class CrumbleBlockOnJump : Solid {
         if (!Collidable)
             return;
 
-        Audio.Play(SFX.game_10_quake_rockbreak, Position);
+        Audio.Play(breakSound, Position);
         Collidable = false;
 
         for (int i = 0; i < Width; i += 8) {
