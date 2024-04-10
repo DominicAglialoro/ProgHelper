@@ -42,31 +42,41 @@ public static class PlayerExtensions {
             DynamicData.For(player).Set("jumpGraceTimer", 0f);
     }
 
-    private static Vector2 ApplyCameraConstraints(Vector2 value, Player player) {
-        if (DynamicData.For(player).TryGet("cameraConstraints", out CameraConstraints cameraConstraints)) {
-            if (cameraConstraints.HasMinX)
-                value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
-
-            if (cameraConstraints.HasMaxX)
-                value.X = Math.Min(value.X, player.Position.X + cameraConstraints.MaxX - 160f);
-
-            if (cameraConstraints.HasMinY)
-                value.Y = Math.Max(value.Y, player.Position.Y + cameraConstraints.MinY - 90f);
-
-            if (cameraConstraints.HasMaxY)
-                value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
-        }
-
-        foreach (var entity in player.Scene.Tracker.GetEntities<CameraHardBorder>())
-            value = ((CameraHardBorder) entity).Constrain(value, player);
-
-        if (!player.EnforceLevelBounds)
-            return value;
-
+    private static Vector2 ApplyCameraConstraints(Vector2 value, Player player, Vector2 cameraTarget) {
         var bounds = player.SceneAs<Level>().Bounds;
 
-        value.X = MathHelper.Clamp(value.X, bounds.Left, bounds.Right - 320f);
-        value.Y = MathHelper.Clamp(value.Y, bounds.Top, bounds.Bottom - 180f);
+        if (DynamicData.For(player).TryGet("cameraConstraints", out CameraConstraints cameraConstraints)) {
+            if (cameraConstraints.HasMinX) {
+                value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
+
+                if (player.EnforceLevelBounds)
+                    value.X = Math.Min(value.X, Math.Max(bounds.Right - 320f, cameraTarget.X));
+            }
+
+            if (cameraConstraints.HasMaxX) {
+                value.X = Math.Min(value.X, player.Position.X + cameraConstraints.MaxX - 160f);
+
+                if (player.EnforceLevelBounds)
+                    value.X = Math.Max(value.X, Math.Min(bounds.Left, cameraTarget.X));
+            }
+
+            if (cameraConstraints.HasMinY) {
+                value.Y = Math.Max(value.Y, player.Position.Y + cameraConstraints.MinY - 90f);
+
+                if (player.EnforceLevelBounds)
+                    value.Y = Math.Min(value.Y, Math.Max(bounds.Bottom - 180f, cameraTarget.Y));
+            }
+
+            if (cameraConstraints.HasMaxY) {
+                value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
+
+                if (player.EnforceLevelBounds)
+                    value.Y = Math.Max(value.Y, Math.Min(bounds.Top, cameraTarget.Y));
+            }
+        }
+
+        foreach (CameraHardBorder entity in player.Scene.Tracker.GetEntities<CameraHardBorder>())
+            value = entity.Constrain(value, player);
 
         return value;
     }
@@ -115,6 +125,7 @@ public static class PlayerExtensions {
         cursor.GotoNext(instr => instr.MatchCallvirt<Camera>("set_Position"));
 
         cursor.Emit(OpCodes.Ldarg_0);
+        cursor.Emit(OpCodes.Ldloc_S, il.Body.Variables[12]);
         cursor.EmitCall(ApplyCameraConstraints);
     }
 
