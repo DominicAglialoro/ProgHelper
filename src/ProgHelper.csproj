@@ -21,12 +21,10 @@
             <HintPath>$(CelestePath)\MMHOOK_Celeste.dll</HintPath>
             <Private>false</Private>
         </Reference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Properties" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Include="packages.config" />
+        <Reference Include="VivHelper">
+            <HintPath>libs\VivHelper.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="MonoMod.RuntimeDetour" Version="25.1.0" />

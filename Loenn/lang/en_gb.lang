@@ -36,6 +36,12 @@ entities.progHelper/linearIntroCrusher.placements.name.default=Linear Intro Crus
 entities.progHelper/linearIntroCrusher.placements.description.default=Intro Crusher with linear movement
 entities.progHelper/linearIntroCrusher.attributes.description.easingPeriod=Fraction of the block's movement period during which it should accelerate, after which it moves linearly
 
+entities.progHelper/throwablePortal.placements.name.default=Throwable Portal
+entities.progHelper/throwablePortal.placements.description.default=Throwable entity that you teleport to when pressing grab
+
+entities.progHelper/throwablePortalReceptacle.placements.name.default=Throwable Portal Receptacle
+entities.progHelper/throwablePortalReceptacle.placements.description.default=Opens a nearby temple gate when activated by a throwable portal
+
 triggers.progHelper/cameraConstraintTrigger.placements.name.default=Camera Constraint Trigger
 triggers.progHelper/cameraConstraintTrigger.placements.description.default=Sets a strict boundary on how far the camera can move ahead of or behind the player
 triggers.progHelper/cameraConstraintTrigger.attributes.description.minX=Leftmost point that the camera is allowed to move, in camera offset units

@@ -19,6 +19,11 @@ public static class PlayerExtensions {
         On.Celeste.Player.WallJump += Player_WallJump;
         On.Celeste.Player.ClimbJump += Player_ClimbJump;
         On.Celeste.Player.SuperWallJump += Player_SuperWallJump;
+        On.Celeste.Player.RefillDash += Player_RefillDash;
+        On.Celeste.Player.UseRefill += Player_UseRefill;
+        IL.Celeste.Player.NormalUpdate += Player_NormalUpdate_il;
+        IL.Celeste.Player.DashUpdate += Player_DashUpdate_il;
+        IL.Celeste.Player.LaunchUpdate += Player_LaunchUpdate_il;
     }
 
     public static void Unload() {
@@ -29,6 +34,11 @@ public static class PlayerExtensions {
         On.Celeste.Player.WallJump -= Player_WallJump;
         On.Celeste.Player.ClimbJump -= Player_ClimbJump;
         On.Celeste.Player.SuperWallJump -= Player_SuperWallJump;
+        On.Celeste.Player.RefillDash -= Player_RefillDash;
+        On.Celeste.Player.UseRefill -= Player_UseRefill;
+        IL.Celeste.Player.NormalUpdate -= Player_NormalUpdate_il;
+        IL.Celeste.Player.DashUpdate -= Player_DashUpdate_il;
+        IL.Celeste.Player.LaunchUpdate -= Player_LaunchUpdate_il;
     }
 
     private static void DestroyCrumbleBlockOnJump(this Player player, Vector2 dir)
@@ -81,6 +91,18 @@ public static class PlayerExtensions {
         return value;
     }
 
+    private static bool TryWarpToThrowablePortal(Player player) {
+        int state = player.StateMachine.State;
+
+        if (state == 2 && player.DashDir == Vector2.Zero || player.Holding != null || !Input.GrabCheck
+            || DynamicData.For(player).Invoke<bool>("get_IsTired"))
+            return false;
+
+        var portal = player.Scene.Tracker.GetEntity<ThrowablePortal>();
+
+        return portal != null && portal.TryUseWarp(player);
+    }
+
     private static void Player_orig_Update_il(ILContext il) {
         var cursor = new ILCursor(il);
 
@@ -131,7 +153,7 @@ public static class PlayerExtensions {
 
     private static bool Player_WallJumpCheck(On.Celeste.Player.orig_WallJumpCheck wallJumpCheck, Player player, int dir) =>
         wallJumpCheck(player, dir)
-        && (player.StateMachine.State != 2 || player.DashDir.Y <= 0f || !player.CollideCheck<WavedashProtectionTrigger>());
+        && (player.StateMachine.State != 2 || player.DashDir.X == 0f || player.DashDir.Y <= 0f || !player.CollideCheck<WavedashProtectionTrigger>());
 
     private static void Player_Jump(On.Celeste.Player.orig_Jump jump, Player player, bool particles, bool playsfx) {
         jump(player, particles, playsfx);
@@ -158,5 +180,65 @@ public static class PlayerExtensions {
     private static void Player_SuperWallJump(On.Celeste.Player.orig_SuperWallJump superWallJump, Player player, int dir) {
         superWallJump(player, dir);
         player.DestroyCrumbleBlockOnJump(-5 * dir * Vector2.UnitX);
+    }
+
+    private static bool Player_RefillDash(On.Celeste.Player.orig_RefillDash refillDash, Player player)
+        => refillDash(player) | (player.Holding?.Entity is ThrowablePortal portal && portal.RestoreWarp());
+
+    private static bool Player_UseRefill(On.Celeste.Player.orig_UseRefill useRefill, Player player, bool twodashes)
+        => useRefill(player, twodashes) | (player.Holding?.Entity is ThrowablePortal portal && portal.RestoreWarp());
+
+    private static void Player_NormalUpdate_il(ILContext il) {
+        var cursor = new ILCursor(il);
+
+        cursor.GotoNext(MoveType.After,
+            instr => instr.MatchCallvirt<Player>("StartDash"),
+            instr => instr.OpCode == OpCodes.Ret);
+        cursor.MoveAfterLabels();
+
+        var label = cursor.DefineLabel();
+
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.EmitCall(TryWarpToThrowablePortal);
+        cursor.Emit(OpCodes.Brfalse_S, label);
+        cursor.Emit(OpCodes.Ldc_I4_8);
+        cursor.Emit(OpCodes.Ret);
+        cursor.MarkLabel(label);
+    }
+
+    private static void Player_DashUpdate_il(ILContext il) {
+        var cursor = new ILCursor(il);
+
+        cursor.GotoNext(
+            instr => instr.OpCode == OpCodes.Ldc_I4_8,
+            instr => instr.OpCode == OpCodes.Stloc_S);
+        cursor.GotoNext(instr => instr.MatchLdflda<Player>("DashDir"));
+
+        var label = cursor.DefineLabel();
+
+        cursor.EmitCall(TryWarpToThrowablePortal);
+        cursor.Emit(OpCodes.Brfalse, label);
+        cursor.Emit(OpCodes.Ldc_I4_8);
+        cursor.Emit(OpCodes.Ret);
+        cursor.MarkLabel(label);
+        cursor.Emit(OpCodes.Ldarg_0);
+    }
+
+    private static void Player_LaunchUpdate_il(ILContext il) {
+        var cursor = new ILCursor(il);
+
+        cursor.GotoNext(
+            instr => instr.OpCode == OpCodes.Ldc_I4_8,
+            instr => instr.OpCode == OpCodes.Stloc_2);
+        cursor.GotoNext(instr => instr.MatchLdflda<Player>("Speed"));
+
+        var label = cursor.DefineLabel();
+
+        cursor.EmitCall(TryWarpToThrowablePortal);
+        cursor.Emit(OpCodes.Brfalse, label);
+        cursor.Emit(OpCodes.Ldc_I4_8);
+        cursor.Emit(OpCodes.Ret);
+        cursor.MarkLabel(label);
+        cursor.Emit(OpCodes.Ldarg_0);
     }
 }

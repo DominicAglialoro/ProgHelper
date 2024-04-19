@@ -10,6 +10,8 @@ public class ProgHelperModule : EverestModule {
 
     public override Type SessionType => typeof(ProgHelperSession);
 
+    public bool VivHelperLoaded { get; private set; }
+
     public ProgHelperModule() {
         Instance = this;
 #if DEBUG
@@ -27,6 +29,11 @@ public class ProgHelperModule : EverestModule {
         PlayerExtensions.Load();
         SolidTilesExtensions.Load();
         TileGridExtensions.Load();
+
+        VivHelperLoaded = Everest.Loader.DependencyLoaded(new EverestModuleMetadata {
+            Name = "VivHelper",
+            Version = new Version(1, 14, 2)
+        });
     }
 
     public override void Unload() {
