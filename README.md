@@ -14,6 +14,10 @@ A Celeste helper mod containing various custom entities and triggers, most of wh
 
 - **Linear Intro Crusher**: An Intro Crusher with linear movement. Can also have a curve that starts accelerating and then becomes linear after a set period. The linear movement makes it easier to get maximum LiftBoost when jumping off of it
 
+- **Throwable Portal**: A throwable entity that you teleport to when pressing grab
+
+- **Throwable Portal Receptacle**: Opens a nearby temple gate when activated by a throwable portal
+
 - **Tile Pulse Controller / Tile Pulse Source**: Applies a pulsing light effect to contiguous groups of tiles
 
 ## Triggers

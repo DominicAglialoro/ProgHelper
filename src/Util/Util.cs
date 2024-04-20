@@ -24,8 +24,4 @@ public static class Util {
 
     public static ILHook CreateHook(this Type type, string name, ILContext.Manipulator manipulator)
         => new(type.GetMethod(name, ALL_FLAGS), manipulator);
-
-    public static MethodInfo GetMethodUnconstrained(this Type type, string name) => type.GetMethod(name, ALL_FLAGS);
-
-    public static PropertyInfo GetPropertyUnconstrained(this Type type, string name) => type.GetProperty(name, ALL_FLAGS);
 }
