@@ -13,7 +13,9 @@ return {
 				cardinal = false,
 				snapUp = false,
 				snapDown = false,
-				wobble = true
+				wobble = true,
+				boostHoldables = false,
+				ignoreHoldableWhenHot = false
 			}
 		},
 		{
@@ -28,7 +30,9 @@ return {
 				cardinal = false,
 				snapUp = false,
 				snapDown = false,
-				wobble = true
+				wobble = true,
+				boostHoldables = false,
+				ignoreHoldableWhenHot = false
 			}
 		},
 		{
@@ -43,7 +47,9 @@ return {
 				cardinal = false,
 				snapUp = false,
 				snapDown = false,
-				wobble = true
+				wobble = true,
+				boostHoldables = false,
+				ignoreHoldableWhenHot = false
 			}
 		},
 		{
@@ -58,7 +64,9 @@ return {
 				cardinal = false,
 				snapUp = false,
 				snapDown = false,
-				wobble = true
+				wobble = true,
+				boostHoldables = false,
+				ignoreHoldableWhenHot = false
 			}
 		}
 	},
@@ -74,7 +82,8 @@ return {
 		"cardinal",
 		"snapUp",
 		"snapDown",
-		"wobble"
+		"wobble",
+		"boostHoldables"
 	},
 	fieldInformation = {
 		bumperBoost = {
