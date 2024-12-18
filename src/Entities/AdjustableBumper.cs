@@ -167,7 +167,7 @@ public class AdjustableBumper : Entity {
    
     private void OnHoldable(Holdable hold)
     {
-        if (respawnTimer > 0f || (fireMode && ignoreHoldableWhenHot)) return;
+        if (respawnTimer > 0f || (fireMode && ignoreHoldableWhenHot) || hold.IsHeld) return;
 
         respawnTimer = respawnTime;
 
