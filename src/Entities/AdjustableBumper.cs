@@ -26,6 +26,7 @@ public class AdjustableBumper : Entity {
     private bool fireMode;
     private bool goBack;
     private Vector2 hitDir;
+    private bool ignoreHoldableWhenHot;
 
     public AdjustableBumper(EntityData data, Vector2 offset) : base(data.Position + offset) {
         respawnTime = data.Float("respawnTime");
@@ -35,6 +36,13 @@ public class AdjustableBumper : Entity {
         bumperBoost = data.Enum<BumperBoostType>("bumperBoost");
         dashRestores = data.Enum<DashRestores>("dashRestores");
         fireModeType = data.Enum<BumperFireModeType>("fireMode");
+        if(data.Bool("boostHoldables", false))
+        {
+            Add(new HoldableCollider(OnHoldable));
+        }
+
+        ignoreHoldableWhenHot = data.Bool("ignoreHoldableWhenHot", false);
+
         anchor = Position;
 
         var node = data.FirstNodeNullable();
@@ -156,6 +164,34 @@ public class AdjustableBumper : Entity {
         sprite.Visible = false;
         spriteEvil.Visible = true;
     }
+   
+    private void OnHoldable(Holdable hold)
+    {
+        if (respawnTimer > 0f || (fireMode && ignoreHoldableWhenHot) || hold.IsHeld) return;
+
+        respawnTimer = respawnTime;
+
+        var direction = HoldableLaunch(hold);
+
+        sprite.Play("hit", true);
+        spriteEvil.Play("hit", true);
+        light.Visible = false;
+        bloom.Visible = false;
+
+        var level = SceneAs<Level>();
+
+        level.DirectionalShake(direction, 0.15f);
+        level.Displacement.AddBurst(Center, 0.3f, 8f, 32f, 0.8f);
+        level.Particles.Emit(Bumper.P_Launch, 12, Center + 1f * direction, 3f * Vector2.One, direction.Angle());
+        Audio.Play(SFX.game_06_pinballbumper_hit, Position);
+
+        if (fireModeType != BumperFireModeType.AfterHit) return;
+
+        fireMode = true;
+        sprite.Visible = false;
+        spriteEvil.Visible = true;
+    }
+
 
     private void OnCoreModeChange(Session.CoreModes coreMode) {
         if (fireModeType != BumperFireModeType.CoreMode)
@@ -215,6 +251,37 @@ public class AdjustableBumper : Entity {
         dynamicData.Set("dashCooldownTimer", 0.2f);
         player.StateMachine.State = 7;
         SlashFx.Burst(player.Center, player.Speed.Angle());
+
+        return direction;
+    }
+
+    private Vector2 HoldableLaunch(Holdable hold)
+    {
+        Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
+        Celeste.Freeze(0.1f);
+
+        var direction = (hold.Entity.Center - Center).SafeNormalize(-Vector2.UnitY);
+        float dot = direction.Y;
+
+        if (cardinal)
+            direction = direction.FourWayNormal();
+        else if (snapUp && dot <= -0.8f)
+            direction = -Vector2.UnitY;
+        else if (snapDown && dot >= 0.8f)
+            direction = Vector2.UnitY;
+        else if (dot >= -0.55 || dot <= 0.65)
+            direction = Math.Sign(direction.X) * Vector2.UnitX;
+
+        var speed = 280f * direction;
+
+        if (speed.Y <= 50f)
+        {
+            speed.Y = Math.Min(speed.Y, -150f);
+        }
+
+        hold.SetSpeed(speed);
+
+        SlashFx.Burst(hold.Entity.Center, hold.GetSpeed().Angle());
 
         return direction;
     }
