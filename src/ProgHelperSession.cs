@@ -1,4 +1,4 @@
-﻿namespace Celeste.Mod.ArchieCollab2024Helper;
+﻿namespace Celeste.Mod.ProgHelper;
 
 public class ProgHelperSession : EverestModuleSession {
     public float TilePulseBaseBrightness { get; set; } = 1f;
