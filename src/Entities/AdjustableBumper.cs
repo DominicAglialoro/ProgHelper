@@ -36,12 +36,11 @@ public class AdjustableBumper : Entity {
         bumperBoost = data.Enum<BumperBoostType>("bumperBoost");
         dashRestores = data.Enum<DashRestores>("dashRestores");
         fireModeType = data.Enum<BumperFireModeType>("fireMode");
-        if(data.Bool("boostHoldables", false))
-        {
-            Add(new HoldableCollider(OnHoldable));
-        }
 
-        ignoreHoldableWhenHot = data.Bool("ignoreHoldableWhenHot", false);
+        if(data.Bool("boostHoldables"))
+            Add(new HoldableCollider(OnHoldable));
+
+        ignoreHoldableWhenHot = data.Bool("ignoreHoldableWhenHot");
 
         anchor = Position;
 
@@ -164,10 +163,11 @@ public class AdjustableBumper : Entity {
         sprite.Visible = false;
         spriteEvil.Visible = true;
     }
-   
+
     private void OnHoldable(Holdable hold)
     {
-        if (respawnTimer > 0f || (fireMode && ignoreHoldableWhenHot) || hold.IsHeld) return;
+        if (respawnTimer > 0f || fireMode && ignoreHoldableWhenHot || hold.IsHeld)
+            return;
 
         respawnTimer = respawnTime;
 
@@ -185,7 +185,8 @@ public class AdjustableBumper : Entity {
         level.Particles.Emit(Bumper.P_Launch, 12, Center + 1f * direction, 3f * Vector2.One, direction.Angle());
         Audio.Play(SFX.game_06_pinballbumper_hit, Position);
 
-        if (fireModeType != BumperFireModeType.AfterHit) return;
+        if (fireModeType != BumperFireModeType.AfterHit)
+            return;
 
         fireMode = true;
         sprite.Visible = false;
@@ -275,9 +276,7 @@ public class AdjustableBumper : Entity {
         var speed = 280f * direction;
 
         if (speed.Y <= 50f)
-        {
             speed.Y = Math.Min(speed.Y, -150f);
-        }
 
         hold.SetSpeed(speed);
 

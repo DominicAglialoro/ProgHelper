@@ -141,7 +141,7 @@ public class AdjustableFallingBlock : Solid {
                 if (MoveVCollideSolids(speed * Engine.DeltaTime, true))
                     break;
                 
-                if (Top > level.Bounds.Bottom + 16 || (Top > level.Bounds.Bottom - 1 && CollideCheck<Solid>(Position + Vector2.UnitY))) {
+                if (Top > level.Bounds.Bottom + 16 || Top > level.Bounds.Bottom - 1 && CollideCheck<Solid>(Position + Vector2.UnitY)) {
                     Collidable = false;
                     Visible = false;
                     
