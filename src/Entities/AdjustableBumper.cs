@@ -193,7 +193,6 @@ public class AdjustableBumper : Entity {
         spriteEvil.Visible = true;
     }
 
-
     private void OnCoreModeChange(Session.CoreModes coreMode) {
         if (fireModeType != BumperFireModeType.CoreMode)
             return;

@@ -9,9 +9,22 @@ using MonoMod.Utils;
 namespace Celeste.Mod.ProgHelper;
 
 public static class TileGridExtensions {
-    public static void Load() => IL.Monocle.TileGrid.RenderAt += TileGrid_RenderAt_il;
+    private static readonly BlendState ALPHA_TO_MASK_BLEND = new() {
+        ColorSourceBlend = Blend.Zero,
+        ColorDestinationBlend = Blend.InverseSourceAlpha,
+        AlphaSourceBlend = Blend.Zero,
+        AlphaDestinationBlend = Blend.One
+    };
 
-    public static void Unload() => IL.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt_il;
+    public static void Load() {
+        On.Monocle.TileGrid.RenderAt += TileGrid_RenderAt;
+        IL.Monocle.TileGrid.RenderAt += TileGrid_RenderAt_il;
+    }
+
+    public static void Unload() {
+        On.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt;
+        IL.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt_il;
+    }
 
     public static void GeneratePulseIndices(this TileGrid tileGrid, VirtualMap<char> tiles, bool bg) {
         var level = tileGrid.SceneAs<Level>();
@@ -77,6 +90,34 @@ public static class TileGridExtensions {
         DynamicData.For(tileGrid).Set("tilePulseIndices", pulseIndices);
     }
 
+    public static void GenerateInvertMask(this TileGrid tileGrid, VirtualMap<char> tiles) {
+        var level = tileGrid.SceneAs<Level>();
+
+        if (level == null)
+            return;
+
+        int width = tiles.Columns;
+        int height = tiles.Rows;
+
+        bool[,] invertMask = new bool[width, height];
+        bool any = false;
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (tiles[i, j] == '0')
+                    continue;
+
+                invertMask[i, j] = true;
+                any = true;
+            }
+        }
+
+        if (!any)
+            return;
+
+        DynamicData.For(tileGrid).Set("tileInvertMask", invertMask);
+    }
+
     private static int[,] GetPulseIndices(TileGrid tileGrid)
         => DynamicData.For(tileGrid).Get<int[,]>("tilePulseIndices");
 
@@ -93,6 +134,41 @@ public static class TileGridExtensions {
         float interp = 1f - MathHelper.Clamp(Util.Mod(tileGrid.Scene.TimeActive - pulseIndex * modSession.TilePulseStep, modSession.TilePulseInterval) / modSession.TilePulseLength, 0f, 1f);
 
         return Util.MultiplyKeepAlpha(color, MathHelper.Lerp(modSession.TilePulseBaseBrightness, 1f, interp * interp));
+    }
+
+    private static void TileGrid_RenderAt(On.Monocle.TileGrid.orig_RenderAt renderAt, TileGrid tileGrid, Vector2 position) {
+        if (tileGrid.Scene.Tracker.GetEntity<NegativeSpaceController>()?.BackgroundInvertsColor is not true || !DynamicData.For(tileGrid).TryGet("tileInvertMask", out bool[,] invertMask)) {
+            renderAt(tileGrid, position);
+
+            return;
+        }
+
+        GameplayRenderer.End();
+        Engine.Instance.GraphicsDevice.SetRenderTarget(GameplayBuffersExtensions.InvertMask);
+        Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, ALPHA_TO_MASK_BLEND, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, tileGrid.ClipCamera.Matrix);
+
+        var clippedRenderTiles = tileGrid.GetClippedRenderTiles();
+        int tileWidth = tileGrid.TileWidth;
+        int tileHeight = tileGrid.TileHeight;
+        var tilePosition = new Vector2(position.X + tileWidth * clippedRenderTiles.X, position.Y + tileHeight * clippedRenderTiles.Y);
+
+        for (int i = clippedRenderTiles.X; i < clippedRenderTiles.Right; i++) {
+            for (int j = clippedRenderTiles.Y; j < clippedRenderTiles.Bottom; j++) {
+                var tile = tileGrid.Tiles[i, j];
+
+                if (tile != null && invertMask[i, j])
+                    Draw.SpriteBatch.Draw(tile.Texture.Texture_Safe, tilePosition, tile.ClipRect, Color.White);
+
+                tilePosition.Y += tileHeight;
+            }
+
+            tilePosition.X += tileWidth;
+            tilePosition.Y = position.Y + tileHeight * clippedRenderTiles.Y;
+        }
+
+        Draw.SpriteBatch.End();
+        Engine.Instance.GraphicsDevice.SetRenderTarget(GameplayBuffers.Gameplay);
+        GameplayRenderer.Begin();
     }
 
     private static void TileGrid_RenderAt_il(ILContext il) {

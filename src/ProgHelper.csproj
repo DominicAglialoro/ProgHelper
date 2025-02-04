@@ -17,6 +17,9 @@
             <HintPath>$(CelestePath)\FNA.dll</HintPath>
             <Private>false</Private>
         </Reference>
+        <Reference Include="GravityHelper">
+          <HintPath>libs\GravityHelper.dll</HintPath>
+        </Reference>
         <Reference Include="MMHOOK_Celeste">
             <HintPath>$(CelestePath)\MMHOOK_Celeste.dll</HintPath>
             <Private>false</Private>

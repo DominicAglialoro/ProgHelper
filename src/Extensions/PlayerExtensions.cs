@@ -119,22 +119,22 @@ public static class PlayerExtensions {
             instr => instr.OpCode == OpCodes.Ldnull);
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.EmitCall(ClipPreventionTrigger.BeginTestH);
+        cursor.EmitCall(ClipPrevention.BeginTestH);
 
         cursor.Index += 2;
 
-        cursor.EmitCall(ClipPreventionTrigger.EndTest);
+        cursor.EmitCall(ClipPrevention.EndTest);
 
         cursor.GotoNext(MoveType.After,
             instr => instr.MatchLdfld<Player>("onCollideV"),
             instr => instr.OpCode == OpCodes.Ldnull);
 
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.EmitCall(ClipPreventionTrigger.BeginTestV);
+        cursor.EmitCall(ClipPrevention.BeginTestV);
 
         cursor.Index += 2;
 
-        cursor.EmitCall(ClipPreventionTrigger.EndTest);
+        cursor.EmitCall(ClipPrevention.EndTest);
 
         ILLabel label = null;
 

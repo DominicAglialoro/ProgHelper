@@ -5,8 +5,9 @@ return {
 		data = {
 			right = true,
 			left = true,
-			up = false,
-			down = false
+			up = true,
+			down = true,
+			applyToEntites = false
 		}
 	},
 	fieldOrder = {
@@ -17,6 +18,7 @@ return {
 		"left",
 		"right",
 		"up",
-		"down"
+		"down",
+		"applyToEntities"
 	}
 }

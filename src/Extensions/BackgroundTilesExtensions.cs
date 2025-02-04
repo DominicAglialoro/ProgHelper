@@ -22,6 +22,10 @@ public static class BackgroundTilesExtensions {
 
     private static void BackgroundTiles_Added(On.Celeste.BackgroundTiles.orig_Added added, BackgroundTiles backgroundTiles, Scene scene) {
         added(backgroundTiles, scene);
-        backgroundTiles.Tiles.GeneratePulseIndices(DynamicData.For(backgroundTiles).Get<VirtualMap<char>>("tileTypes"), true);
+
+        var tileTypes = DynamicData.For(backgroundTiles).Get<VirtualMap<char>>("tileTypes");
+
+        backgroundTiles.Tiles.GeneratePulseIndices(tileTypes, true);
+        backgroundTiles.Tiles.GenerateInvertMask(tileTypes);
     }
 }
