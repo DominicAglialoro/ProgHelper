@@ -12,6 +12,7 @@ return {
 			permanent = false,
 			blendIn = false,
 			destroyStaticMovers = false,
+			createDebris = true,
 			width = 8,
 			height = 8
 		}
@@ -27,7 +28,8 @@ return {
 		"triggerOnLean",
 		"permanent",
 		"blendIn",
-		"destroyStaticMovers"
+		"destroyStaticMovers",
+		"createDebris"
 	},
 	fieldInformation = fakeTilesHelper.getFieldInformation("tiletype"),
 	sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false),

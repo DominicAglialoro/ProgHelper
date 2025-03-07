@@ -203,11 +203,9 @@ public class AdjustableBumper : Entity {
     }
 
     private Vector2 Launch(Player player) {
-        var dynamicData = DynamicData.For(player);
-
         Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
         Celeste.Freeze(0.1f);
-        dynamicData.Set("launchApproxX", new float?());
+        player.launchApproachX = new float?();
 
         var direction = (player.Center - Center).SafeNormalize(-Vector2.UnitY);
         float dot = direction.Y;
@@ -231,11 +229,11 @@ public class AdjustableBumper : Entity {
         if (speed.X != 0f && bumperBoost != BumperBoostType.Disable) {
             if (bumperBoost == BumperBoostType.Force || Input.MoveX.Value == Math.Sign(speed.X)) {
                 speed.X *= 1.2f;
-                dynamicData.Set("explodeLaunchBoostTimer", 0f);
+                player.explodeLaunchBoostTimer = 0f;
             }
             else {
-                dynamicData.Set("explodeLaunchBoostTimer", 0.01f);
-                dynamicData.Set("explodeLaunchBoostSpeed", 1.2f * speed.X);
+                player.explodeLaunchBoostTimer = 0.01f;
+                player.explodeLaunchBoostSpeed = 1.2f * speed.X;
             }
         }
 
@@ -248,7 +246,7 @@ public class AdjustableBumper : Entity {
 
         player.RefillStamina();
 
-        dynamicData.Set("dashCooldownTimer", 0.2f);
+        player.dashCooldownTimer = 0.2f;
         player.StateMachine.State = 7;
         SlashFx.Burst(player.Center, player.Speed.Angle());
 

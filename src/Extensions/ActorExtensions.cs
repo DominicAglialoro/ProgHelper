@@ -16,18 +16,16 @@ public static class ActorExtensions {
     private static void Actor_NaiveMove(On.Celeste.Actor.orig_NaiveMove naiveMove, Actor actor, Vector2 amount) {
         naiveMove(actor, amount);
 
-        if (actor is not Player player || player.Scene.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap(true) is not true
-            || !Input.GrabCheck || player.DashDir.X == 0f)
+        if (actor is not Player player)
             return;
 
-        var dynamicData = DynamicData.For(player);
-        int moveX = dynamicData.Get<int>("moveX");
+        var controller = player.Scene.Tracker.GetEntity<NegativeSpaceController>();
 
-        if (moveX != -Math.Sign(player.DashDir.X) || !player.ClimbCheck(moveX))
+        if (controller == null || !controller.CheckForSwap())
             return;
 
-        dynamicData.Set("dreamDashCanEndTimer", 0f);
-        dynamicData.Set("communalHelperDreamTunnelDashCanEndTimer", 0f);
+        if (controller.FlipsGravity)
+            GravityHelperImports.SetPlayerGravity?.Invoke(2, 1f);
     }
 
     public static void Unload() {

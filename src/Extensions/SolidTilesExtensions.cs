@@ -10,6 +10,6 @@ public static class SolidTilesExtensions {
 
     private static void SolidTiles_Added(On.Celeste.SolidTiles.orig_Added added, SolidTiles solidTiles, Scene scene) {
         added(solidTiles, scene);
-        solidTiles.Tiles.GeneratePulseIndices(DynamicData.For(solidTiles).Get<VirtualMap<char>>("tileTypes"), false);
+        solidTiles.Tiles.GeneratePulseIndices(solidTiles.tileTypes, false);
     }
 }

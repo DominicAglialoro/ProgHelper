@@ -41,6 +41,13 @@ public static class PlayerExtensions {
         IL.Celeste.Player.LaunchUpdate -= Player_LaunchUpdate_il;
     }
 
+    private static Vector2 GetGravityDirection() {
+        if (GravityHelperImports.IsPlayerInverted == null)
+            return Vector2.UnitY;
+
+        return GravityHelperImports.IsPlayerInverted.Invoke() ? -Vector2.UnitY : Vector2.UnitY;
+    }
+
     private static void DestroyCrumbleBlockOnJump(this Player player, Vector2 dir)
         => player.CollideFirst<CrumbleBlockOnJump>(player.Position + dir)?.Break();
 
@@ -49,7 +56,7 @@ public static class PlayerExtensions {
 
     private static void CheckForDisableCoyoteJump(Player player) {
         if (player.CollideCheck<DisableCoyoteJumpTrigger>())
-            DynamicData.For(player).Set("jumpGraceTimer", 0f);
+            player.jumpGraceTimer = 0f;
     }
 
     private static Vector2 ApplyCameraConstraints(Vector2 value, Player player, Vector2 cameraTarget) {
@@ -94,8 +101,7 @@ public static class PlayerExtensions {
     private static bool TryWarpToThrowablePortal(Player player) {
         int state = player.StateMachine.State;
 
-        if (state == 2 && player.DashDir == Vector2.Zero || player.Holding != null || !Input.GrabCheck
-            || DynamicData.For(player).Invoke<bool>("get_IsTired"))
+        if (state == 2 && player.DashDir == Vector2.Zero || player.Holding != null || !Input.GrabCheck || player.IsTired)
             return false;
 
         var portal = player.Scene.Tracker.GetEntity<ThrowablePortal>();
@@ -157,13 +163,13 @@ public static class PlayerExtensions {
 
     private static void Player_Jump(On.Celeste.Player.orig_Jump jump, Player player, bool particles, bool playsfx) {
         jump(player, particles, playsfx);
-        player.DestroyCrumbleBlockOnJump(Vector2.UnitY);
+        player.DestroyCrumbleBlockOnJump(GetGravityDirection());
         player.DestroyCrumbleJumpThruOnJump();
     }
 
     private static void Player_SuperJump(On.Celeste.Player.orig_SuperJump superJump, Player player) {
         superJump(player);
-        player.DestroyCrumbleBlockOnJump(Vector2.UnitY);
+        player.DestroyCrumbleBlockOnJump(GetGravityDirection());
         player.DestroyCrumbleJumpThruOnJump();
     }
 

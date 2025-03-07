@@ -8,31 +8,29 @@ namespace Celeste.Mod.ProgHelper;
 [CustomEntity("progHelper/negativeSpaceController"), Tracked]
 public class NegativeSpaceController : Entity {
     public readonly bool BackgroundInvertsColor;
-
-    private readonly bool flipsGravity;
+    public readonly bool FlipsGravity;
 
     public NegativeSpaceController(EntityData data, Vector2 offset) : base(data.Position + offset) {
         BackgroundInvertsColor = data.Bool("backgroundInvertsColor");
-        flipsGravity = data.Bool("flipsGravity");
+        FlipsGravity = data.Bool("flipsGravity");
     }
 
-    public bool CheckForSwap(bool flipGravityIfSwapped) {
-        var player = Scene.Tracker.GetEntity<Player>();
-        var dynamicData = DynamicData.For(Scene);
-        var bgSolid = dynamicData.Get<Solid>("bgSolid");
-        var fgSolid = dynamicData.Get<Solid>("fgSolid");
+    public bool CheckForSwap() {
+        var solids = Scene.Tracker.GetEntities<NegativeSpaceSolid>();
 
         Solid currentSolid;
         Solid otherSolid;
 
-        if (bgSolid.Collidable) {
-            currentSolid = bgSolid;
-            otherSolid = fgSolid;
+        if (solids[0].Collidable) {
+            currentSolid = (Solid) solids[0];
+            otherSolid = (Solid) solids[1];
         }
         else {
-            currentSolid = fgSolid;
-            otherSolid = bgSolid;
+            currentSolid = (Solid) solids[1];
+            otherSolid = (Solid) solids[0];
         }
+
+        var player = Scene.Tracker.GetEntity<Player>();
 
         if (!player.CollideCheck(currentSolid))
             return false;
@@ -47,8 +45,6 @@ public class NegativeSpaceController : Entity {
 
         currentSolid.Collidable = false;
 
-        if (flipGravityIfSwapped && flipsGravity)
-            GravityHelperImports.SetPlayerGravity?.Invoke(2, 1f);
 
         return true;
     }

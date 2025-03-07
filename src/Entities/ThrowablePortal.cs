@@ -276,7 +276,7 @@ public class ThrowablePortal : Actor {
         player.Position = Position;
         player.Ducking = false;
 
-        if (player.CollideCheck<Solid>() || !DynamicData.For(player).Invoke<bool>("Pickup", Hold)) {
+        if (player.CollideCheck<Solid>() || !player.Pickup(Hold)) {
             player.Position = playerPreviousPosition;
             player.Ducking = playerWasDucking;
             Position = restorePosition;
@@ -307,7 +307,7 @@ public class ThrowablePortal : Actor {
         return true;
     }
 
-    protected override void OnSquish(CollisionData data) {
+    public override void OnSquish(CollisionData data) {
         if (!TrySquishWiggle(data))
             RemoveSelf();
     }

@@ -61,7 +61,7 @@ public static class LevelExtensions {
                 data[i, j] = level.BgData[i, j] != '0';
         }
 
-        var bgSolid = new Solid(bgTiles.Position, 1f, 1f, true);
+        var bgSolid = new NegativeSpaceSolid(bgTiles.Position, 1f, 1f, true);
 
         bgSolid.Tag = Tags.Global;
         bgSolid.Collider = new Grid(8f, 8f, data);
@@ -72,25 +72,19 @@ public static class LevelExtensions {
                 data[i, j] = !data[i, j];
         }
 
-        var fgSolid = new Solid(bgTiles.Position, 1f, 1f, true);
+        var fgSolid = new NegativeSpaceSolid(bgTiles.Position, 1f, 1f, true);
 
         fgSolid.Tag = Tags.Global;
         fgSolid.Collider = new Grid(8f, 8f, data);
         fgSolid.Collidable = false;
         level.Add(fgSolid);
-
-        var dynamicData = DynamicData.For(level);
-
-        dynamicData.Set("bgSolid", bgSolid);
-        dynamicData.Set("fgSolid", fgSolid);
     }
 
     private static void Level_LoadLevel(On.Celeste.Level.orig_LoadLevel loadLevel, Level level, Player.IntroTypes playerintro, bool isfromloader) {
-        var dynamicData = DynamicData.For(level);
-
-        if (dynamicData.TryGet<Solid>("bgSolid", out _)) {
+        if (level.Tracker.GetEntity<NegativeSpaceSolid>() != null) {
+            Logger.Log(LogLevel.Info, "ProgHelper", "Existing tiles found");
             loadLevel(level, playerintro, isfromloader);
-            level.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap(false);
+            level.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap();
 
             return;
         }
@@ -102,12 +96,13 @@ public static class LevelExtensions {
                 continue;
 
             level.GenerateSolidTiles();
+            Logger.Log(LogLevel.Info, "ProgHelper", "Generating new tiles");
 
             break;
         }
 
         loadLevel(level, playerintro, isfromloader);
-        level.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap(false);
+        level.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap();
     }
 
     private static void Level_Render_il(ILContext il) {

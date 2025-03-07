@@ -16,6 +16,7 @@ public class CrumbleBlockOnJump : Solid {
     private bool permanent;
     private bool blendIn;
     private bool destroyStaticMovers;
+    private bool createDebris;
     private EntityID id;
 
     public CrumbleBlockOnJump(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset, data.Width, data.Height, false) {
@@ -26,6 +27,7 @@ public class CrumbleBlockOnJump : Solid {
         permanent = data.Bool("permanent");
         blendIn = data.Bool("blendIn");
         destroyStaticMovers = data.Bool("destroyStaticMovers");
+        createDebris = data.Bool("createDebris");
 
         this.id = id;
         Depth = blendIn ? -10501 : -12999;
@@ -68,10 +70,12 @@ public class CrumbleBlockOnJump : Solid {
         Audio.Play(breakSound, Position);
         Collidable = false;
 
-        for (int i = 0; i < Width; i += 8) {
-            for (int j = 0; j < Height; j += 8) {
-                if (!Scene.CollideCheck<Solid>(new Rectangle((int) X + i, (int) Y + j, 8, 8)))
-                    Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(i + 4, j + 4), tileType, true).BlastFrom(TopCenter));
+        if (createDebris) {
+            for (int i = 0; i < Width; i += 8) {
+                for (int j = 0; j < Height; j += 8) {
+                    if (!Scene.CollideCheck<Solid>(new Rectangle((int) X + i, (int) Y + j, 8, 8)))
+                        Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(i + 4, j + 4), tileType, true).BlastFrom(TopCenter));
+                }
             }
         }
 
