@@ -16,6 +16,7 @@
         </Reference>
         <Reference Include="GravityHelper">
           <HintPath>libs\GravityHelper.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="MMHOOK_Celeste">
             <HintPath>$(CelestePath)\MMHOOK_Celeste.dll</HintPath>

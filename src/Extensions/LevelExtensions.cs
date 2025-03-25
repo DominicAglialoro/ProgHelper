@@ -3,49 +3,53 @@ using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper;
 
 public static class LevelExtensions {
-    private static readonly BlendState INVERT_BLEND = new() {
-        ColorSourceBlend = Blend.Zero,
-        ColorDestinationBlend = Blend.InverseSourceColor,
+    private static readonly BlendState SUBTRACT_BLEND = new() {
+        ColorSourceBlend = Blend.One,
+        ColorDestinationBlend = Blend.One,
         AlphaSourceBlend = Blend.Zero,
-        AlphaDestinationBlend = Blend.One
+        AlphaDestinationBlend = Blend.One,
+        ColorBlendFunction = BlendFunction.ReverseSubtract
     };
 
-    private static readonly BlendState INVERT_MASKED_BLEND = new() {
-        ColorSourceBlend = Blend.InverseDestinationColor,
-        ColorDestinationBlend = Blend.InverseSourceColor,
+    private static readonly BlendState APPLY_ALPHA_BLEND = new() {
+        ColorSourceBlend = Blend.Zero,
+        ColorDestinationBlend = Blend.SourceAlpha,
         AlphaSourceBlend = Blend.Zero,
-        AlphaDestinationBlend = Blend.One
+        AlphaDestinationBlend = Blend.SourceAlpha
     };
 
     public static void Load() {
-        On.Celeste.Level.LoadLevel += Level_LoadLevel;
-        IL.Celeste.Level.Render += Level_Render_il;
+        // On.Celeste.Level.LoadLevel += Level_LoadLevel;
+        // IL.Celeste.Level.Render += Level_Render_il;
     }
 
     public static void Unload() {
-        On.Celeste.Level.LoadLevel -= Level_LoadLevel;
-        IL.Celeste.Level.Render -= Level_Render_il;
+        // On.Celeste.Level.LoadLevel -= Level_LoadLevel;
+        // IL.Celeste.Level.Render -= Level_Render_il;
     }
 
     private static void RenderInvertMask(Level level) {
-        if (level.Tracker.GetEntity<NegativeSpaceController>()?.BackgroundInvertsColor is not true)
+        if (level.Tracker.GetEntity<TileInvertEffectController>() == null)
             return;
 
         Engine.Instance.GraphicsDevice.SetRenderTarget(GameplayBuffers.TempA);
         Engine.Instance.GraphicsDevice.Clear(Color.White);
 
-        Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, INVERT_BLEND, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+        Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, SUBTRACT_BLEND, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+        Draw.SpriteBatch.Draw(GameplayBuffers.Level, Vector2.Zero, Color.White);
+        Draw.SpriteBatch.End();
+
+        Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, APPLY_ALPHA_BLEND, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
         Draw.SpriteBatch.Draw(GameplayBuffersExtensions.InvertMask, Vector2.Zero, Color.White);
         Draw.SpriteBatch.End();
 
         Engine.Instance.GraphicsDevice.SetRenderTarget(GameplayBuffers.Level);
 
-        Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, INVERT_MASKED_BLEND, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+        Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
         Draw.SpriteBatch.Draw(GameplayBuffers.TempA, Vector2.Zero, Color.White);
         Draw.SpriteBatch.End();
     }

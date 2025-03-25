@@ -1,19 +1,14 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper;
 
-[CustomEntity("progHelper/negativeSpaceController"), Tracked]
+// [CustomEntity("progHelper/negativeSpaceController"), Tracked]
 public class NegativeSpaceController : Entity {
-    public readonly bool BackgroundInvertsColor;
     public readonly bool FlipsGravity;
 
-    public NegativeSpaceController(EntityData data, Vector2 offset) : base(data.Position + offset) {
-        BackgroundInvertsColor = data.Bool("backgroundInvertsColor");
-        FlipsGravity = data.Bool("flipsGravity");
-    }
+    public NegativeSpaceController(EntityData data, Vector2 offset) : base(data.Position + offset) => FlipsGravity = data.Bool("flipsGravity");
 
     public bool CheckForSwap() {
         var solids = Scene.Tracker.GetEntities<NegativeSpaceSolid>();
@@ -44,7 +39,6 @@ public class NegativeSpaceController : Entity {
         }
 
         currentSolid.Collidable = false;
-
 
         return true;
     }

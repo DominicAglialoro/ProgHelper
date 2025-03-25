@@ -34,7 +34,7 @@ public class CameraConstraintTrigger : Trigger {
         if (!Util.CheckFlag(flag, SceneAs<Level>().Session, inverted))
             return;
 
-        DynamicData.For(player).Set("cameraConstraints", constraints);
+        DynamicData.For(player).Set("programmatic.ProgHelper.CameraConstraints", constraints);
 
         if (onlyOnce)
             RemoveSelf();

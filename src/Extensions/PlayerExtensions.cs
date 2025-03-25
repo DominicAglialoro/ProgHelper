@@ -62,7 +62,7 @@ public static class PlayerExtensions {
     private static Vector2 ApplyCameraConstraints(Vector2 value, Player player, Vector2 cameraTarget) {
         var bounds = player.SceneAs<Level>().Bounds;
 
-        if (DynamicData.For(player).TryGet("cameraConstraints", out CameraConstraints cameraConstraints)) {
+        if (DynamicData.For(player).TryGet("programmatic.ProgHelper.CameraConstraints", out CameraConstraints cameraConstraints)) {
             if (cameraConstraints.HasMinX) {
                 value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
 

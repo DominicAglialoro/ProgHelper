@@ -1,5 +1,4 @@
 ﻿using Monocle;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper;
 

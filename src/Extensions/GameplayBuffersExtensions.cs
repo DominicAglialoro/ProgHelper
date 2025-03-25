@@ -6,13 +6,13 @@ public static class GameplayBuffersExtensions {
     public static VirtualRenderTarget InvertMask;
 
     public static void Load() {
-        On.Celeste.GameplayBuffers.Create += GameplayBuffers_Create;
-        On.Celeste.GameplayBuffers.Unload += GameplayBuffers_Unload;
+        // On.Celeste.GameplayBuffers.Create += GameplayBuffers_Create;
+        // On.Celeste.GameplayBuffers.Unload += GameplayBuffers_Unload;
     }
 
     public static void Unload() {
-        On.Celeste.GameplayBuffers.Create -= GameplayBuffers_Create;
-        On.Celeste.GameplayBuffers.Unload -= GameplayBuffers_Unload;
+        // On.Celeste.GameplayBuffers.Create -= GameplayBuffers_Create;
+        // On.Celeste.GameplayBuffers.Unload -= GameplayBuffers_Unload;
     }
 
     private static void GameplayBuffers_Create(On.Celeste.GameplayBuffers.orig_Create create) {

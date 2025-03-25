@@ -11,18 +11,19 @@ namespace Celeste.Mod.ProgHelper;
 public static class TileGridExtensions {
     private static readonly BlendState ALPHA_TO_MASK_BLEND = new() {
         ColorSourceBlend = Blend.Zero,
-        ColorDestinationBlend = Blend.InverseSourceAlpha,
-        AlphaSourceBlend = Blend.Zero,
-        AlphaDestinationBlend = Blend.One
+        ColorDestinationBlend = Blend.Zero,
+        AlphaSourceBlend = Blend.One,
+        AlphaDestinationBlend = Blend.One,
+        AlphaBlendFunction = BlendFunction.Max
     };
 
     public static void Load() {
-        On.Monocle.TileGrid.RenderAt += TileGrid_RenderAt;
+        // On.Monocle.TileGrid.RenderAt += TileGrid_RenderAt;
         IL.Monocle.TileGrid.RenderAt += TileGrid_RenderAt_il;
     }
 
     public static void Unload() {
-        On.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt;
+        // On.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt;
         IL.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt_il;
     }
 
@@ -87,7 +88,7 @@ public static class TileGridExtensions {
             }
         }
 
-        DynamicData.For(tileGrid).Set("tilePulseIndices", pulseIndices);
+        DynamicData.For(tileGrid).Set("programmatic.ProgHelper.TilePulseIndices", pulseIndices);
     }
 
     public static void GenerateInvertMask(this TileGrid tileGrid, VirtualMap<char> tiles) {
@@ -115,11 +116,11 @@ public static class TileGridExtensions {
         if (!any)
             return;
 
-        DynamicData.For(tileGrid).Set("tileInvertMask", invertMask);
+        DynamicData.For(tileGrid).Set("programmatic.ProgHelper.TileInvertMask", invertMask);
     }
 
     private static int[,] GetPulseIndices(TileGrid tileGrid)
-        => DynamicData.For(tileGrid).Get<int[,]>("tilePulseIndices");
+        => DynamicData.For(tileGrid).Get<int[,]>("programmatic.ProgHelper.TilePulseIndices");
 
     private static Color GetColor(Color color, TileGrid tileGrid, int x, int y, int[,] pulseIndices) {
         if (pulseIndices == null)
@@ -137,7 +138,7 @@ public static class TileGridExtensions {
     }
 
     private static void TileGrid_RenderAt(On.Monocle.TileGrid.orig_RenderAt renderAt, TileGrid tileGrid, Vector2 position) {
-        if (tileGrid.Scene.Tracker.GetEntity<NegativeSpaceController>()?.BackgroundInvertsColor is not true || !DynamicData.For(tileGrid).TryGet("tileInvertMask", out bool[,] invertMask)) {
+        if (tileGrid.Scene.Tracker.GetEntity<TileInvertEffectController>() == null || !DynamicData.For(tileGrid).TryGet("programmatic.ProgHelper.TileInvertMask", out bool[,] invertMask)) {
             renderAt(tileGrid, position);
 
             return;

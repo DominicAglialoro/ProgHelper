@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper;
 
@@ -16,7 +14,7 @@ public static class ActorExtensions {
     private static void Actor_NaiveMove(On.Celeste.Actor.orig_NaiveMove naiveMove, Actor actor, Vector2 amount) {
         naiveMove(actor, amount);
 
-        if (actor is not Player player)
+        if (actor is not Player player || player.StateMachine.State != Player.StDreamDash)
             return;
 
         var controller = player.Scene.Tracker.GetEntity<NegativeSpaceController>();

@@ -2,7 +2,6 @@
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using MonoMod.Utils;
 using VivHelper.Entities;
 
 namespace Celeste.Mod.ProgHelper;
