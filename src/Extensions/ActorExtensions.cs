@@ -6,9 +6,15 @@ namespace Celeste.Mod.ProgHelper;
 
 public static class ActorExtensions {
     public static void Load() {
-        On.Celeste.Actor.NaiveMove += Actor_NaiveMove;
+        // On.Celeste.Actor.NaiveMove += Actor_NaiveMove;
         IL.Celeste.Actor.MoveHExact += Il_Actor_MoveHExact;
         IL.Celeste.Actor.MoveVExact += Il_Actor_MoveVExact;
+    }
+
+    public static void Unload() {
+        // On.Celeste.Actor.NaiveMove -= Actor_NaiveMove;
+        IL.Celeste.Actor.MoveHExact -= Il_Actor_MoveHExact;
+        IL.Celeste.Actor.MoveVExact -= Il_Actor_MoveVExact;
     }
 
     private static void Actor_NaiveMove(On.Celeste.Actor.orig_NaiveMove naiveMove, Actor actor, Vector2 amount) {
@@ -24,11 +30,6 @@ public static class ActorExtensions {
 
         if (controller.FlipsGravity)
             GravityHelperImports.SetPlayerGravity?.Invoke(2, 1f);
-    }
-
-    public static void Unload() {
-        IL.Celeste.Actor.MoveHExact -= Il_Actor_MoveHExact;
-        IL.Celeste.Actor.MoveVExact -= Il_Actor_MoveVExact;
     }
 
     private static void Il_Actor_MoveHExact(ILContext il) {
