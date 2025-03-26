@@ -6,13 +6,13 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/colliderEnlarger")]
 public class ColliderEnlarger : Entity {
-    private float hitboxLeft;
-    private float hitboxRight;
-    private float hitboxTop;
-    private float hitboxBottom;
-    private float circleRadius;
-    private float width;
-    private float height;
+    private readonly float hitboxLeft;
+    private readonly float hitboxRight;
+    private readonly float hitboxTop;
+    private readonly float hitboxBottom;
+    private readonly float circleRadius;
+    private readonly float width;
+    private readonly float height;
     
     public ColliderEnlarger(EntityData data, Vector2 offset) : base(data.Position + offset) {
         hitboxLeft = data.Float("hitboxLeft");

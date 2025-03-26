@@ -6,9 +6,10 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/throwablePortalReceptacle"), Tracked]
 public class ThrowablePortalReceptacle : Entity {
+    private readonly Sprite sprite;
+    private readonly EntityID id;
+
     private bool triggered;
-    private Sprite sprite;
-    private EntityID id;
 
     public ThrowablePortalReceptacle(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset) {
         this.id = id;

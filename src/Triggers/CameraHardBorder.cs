@@ -7,12 +7,12 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/cameraHardBorder"), Tracked]
 public class CameraHardBorder : Entity {
-    private bool left;
-    private bool right;
-    private bool top;
-    private bool bottom;
-    private string flag;
-    private bool inverted;
+    private readonly bool left;
+    private readonly bool right;
+    private readonly bool top;
+    private readonly bool bottom;
+    private readonly string flag;
+    private readonly bool inverted;
 
     public CameraHardBorder(EntityData data, Vector2 offset) : base(data.Position + offset) {
         left = data.Bool("left");

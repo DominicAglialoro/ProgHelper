@@ -6,10 +6,10 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/cameraConstraintTrigger")]
 public class CameraConstraintTrigger : Trigger {
-    private CameraConstraints constraints;
-    private bool onlyOnce;
-    private string flag;
-    private bool inverted;
+    private readonly CameraConstraints constraints;
+    private readonly bool onlyOnce;
+    private readonly string flag;
+    private readonly bool inverted;
 
     public CameraConstraintTrigger(EntityData data, Vector2 offset) : base(data, offset) {
         constraints = new CameraConstraints {

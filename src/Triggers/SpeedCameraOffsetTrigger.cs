@@ -6,20 +6,20 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/speedCameraOffsetTrigger")]
 public class SpeedCameraOffsetTrigger : Trigger {
-    private float speedFromX;
-    private float speedToX;
-    private float speedFromY;
-    private float speedToY;
-    private float offsetFromX;
-    private float offsetToX;
-    private float offsetFromY;
-    private float offsetToY;
-    private bool ignoreIfZero;
-    private bool onlyOnce;
-    private bool xOnly;
-    private bool yOnly;
-    private string flag;
-    private bool inverted;
+    private readonly float speedFromX;
+    private readonly float speedToX;
+    private readonly float speedFromY;
+    private readonly float speedToY;
+    private readonly float offsetFromX;
+    private readonly float offsetToX;
+    private readonly float offsetFromY;
+    private readonly float offsetToY;
+    private readonly bool ignoreIfZero;
+    private readonly bool onlyOnce;
+    private readonly bool xOnly;
+    private readonly bool yOnly;
+    private readonly string flag;
+    private readonly bool inverted;
 
     public SpeedCameraOffsetTrigger(EntityData data, Vector2 offset) : base(data, offset) {
         speedFromX = data.Float("speedFromX");

@@ -6,13 +6,13 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/clipPreventionTrigger"), Tracked]
 public class ClipPreventionTrigger : Entity {
-    private bool right;
-    private bool left;
-    private bool up;
-    private bool down;
-    private bool applyToEntities;
-    private float width;
-    private float height;
+    private readonly bool right;
+    private readonly bool left;
+    private readonly bool up;
+    private readonly bool down;
+    private readonly bool applyToEntities;
+    private readonly float width;
+    private readonly float height;
 
     public ClipPreventionTrigger(EntityData data, Vector2 offset) : base(data.Position + offset) {
         right = data.Bool("right");

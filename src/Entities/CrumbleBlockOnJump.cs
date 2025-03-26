@@ -9,15 +9,15 @@ namespace Celeste.Mod.ProgHelper;
 public class CrumbleBlockOnJump : Solid {
     public bool Triggered;
 
-    private float delay;
-    private char tileType;
-    private string breakSound;
-    private bool triggerOnLean;
-    private bool permanent;
-    private bool blendIn;
-    private bool destroyStaticMovers;
-    private bool createDebris;
-    private EntityID id;
+    private readonly float delay;
+    private readonly char tileType;
+    private readonly string breakSound;
+    private readonly bool triggerOnLean;
+    private readonly bool permanent;
+    private readonly bool blendIn;
+    private readonly bool destroyStaticMovers;
+    private readonly bool createDebris;
+    private readonly EntityID id;
 
     public CrumbleBlockOnJump(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset, data.Width, data.Height, false) {
         delay = data.Float("delay");

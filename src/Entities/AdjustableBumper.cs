@@ -7,25 +7,27 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/adjustableBumper")]
 public class AdjustableBumper : Entity {
-    private float respawnTime;
-    private bool cardinal;
-    private bool snapUp;
-    private bool snapDown;
-    private BumperBoostType bumperBoost;
-    private DashRestores dashRestores;
-    private BumperFireModeType fireModeType;
+    private readonly float respawnTime;
+    private readonly bool cardinal;
+    private readonly bool snapUp;
+    private readonly bool snapDown;
+    private readonly BumperBoostType bumperBoost;
+    private readonly DashRestores dashRestores;
+    private readonly bool restoreStamina;
+    private readonly BumperFireModeType fireModeType;
+    private readonly Sprite sprite;
+    private readonly Sprite spriteEvil;
+    private readonly SineWave sine;
+    private readonly VertexLight light;
+    private readonly BloomPoint bloom;
+    private readonly Wiggler hitWiggler;
+    private readonly bool ignoreHoldableWhenHot;
+
     private Vector2 anchor;
-    private Sprite sprite;
-    private Sprite spriteEvil;
-    private SineWave sine;
-    private VertexLight light;
-    private BloomPoint bloom;
-    private Wiggler hitWiggler;
     private float respawnTimer;
     private bool fireMode;
     private bool goBack;
     private Vector2 hitDir;
-    private bool ignoreHoldableWhenHot;
 
     public AdjustableBumper(EntityData data, Vector2 offset) : base(data.Position + offset) {
         respawnTime = data.Float("respawnTime");
@@ -34,6 +36,7 @@ public class AdjustableBumper : Entity {
         snapDown = data.Bool("snapDown");
         bumperBoost = data.Enum<BumperBoostType>("bumperBoost");
         dashRestores = data.Enum<DashRestores>("dashRestores");
+        restoreStamina = data.Bool("restoreStamina", true);
         fireModeType = data.Enum<BumperFireModeType>("fireMode");
 
         if(data.Bool("boostHoldables"))
@@ -163,8 +166,7 @@ public class AdjustableBumper : Entity {
         spriteEvil.Visible = true;
     }
 
-    private void OnHoldable(Holdable hold)
-    {
+    private void OnHoldable(Holdable hold) {
         if (respawnTimer > 0f || fireMode && ignoreHoldableWhenHot || hold.IsHeld)
             return;
 
@@ -243,17 +245,17 @@ public class AdjustableBumper : Entity {
         else if (dashRestores == DashRestores.Two)
             player.UseRefill(true);
 
-        player.RefillStamina();
+        if (restoreStamina)
+            player.RefillStamina();
 
         player.dashCooldownTimer = 0.2f;
-        player.StateMachine.State = 7;
+        player.StateMachine.State = Player.StLaunch;
         SlashFx.Burst(player.Center, player.Speed.Angle());
 
         return direction;
     }
 
-    private Vector2 HoldableLaunch(Holdable hold)
-    {
+    private Vector2 HoldableLaunch(Holdable hold) {
         Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
         Celeste.Freeze(0.1f);
 

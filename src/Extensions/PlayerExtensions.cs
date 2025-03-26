@@ -99,9 +99,7 @@ public static class PlayerExtensions {
     }
 
     private static bool TryWarpToThrowablePortal(Player player) {
-        int state = player.StateMachine.State;
-
-        if (state == 2 && player.DashDir == Vector2.Zero || player.Holding != null || !Input.GrabCheck || player.IsTired)
+        if (player.StateMachine.State == Player.StDash && player.DashDir == Vector2.Zero || player.Holding != null || !Input.GrabCheck || player.IsTired)
             return false;
 
         var portal = player.Scene.Tracker.GetEntity<ThrowablePortal>();
@@ -159,18 +157,28 @@ public static class PlayerExtensions {
 
     private static bool Player_WallJumpCheck(On.Celeste.Player.orig_WallJumpCheck wallJumpCheck, Player player, int dir) =>
         wallJumpCheck(player, dir)
-        && (player.StateMachine.State != 2 || player.DashDir.X == 0f || player.DashDir.Y <= 0f || !player.CollideCheck<WavedashProtectionTrigger>());
+        && (player.StateMachine.State != Player.StDash || player.DashDir.X == 0f || player.DashDir.Y <= 0f || !player.CollideCheck<WavedashProtectionTrigger>());
 
     private static void Player_Jump(On.Celeste.Player.orig_Jump jump, Player player, bool particles, bool playsfx) {
         jump(player, particles, playsfx);
-        player.DestroyCrumbleBlockOnJump(GetGravityDirection());
-        player.DestroyCrumbleJumpThruOnJump();
+
+        var gravityDirection = GetGravityDirection();
+
+        player.DestroyCrumbleBlockOnJump(gravityDirection);
+
+        if (gravityDirection.Y > 0f)
+            player.DestroyCrumbleJumpThruOnJump();
     }
 
     private static void Player_SuperJump(On.Celeste.Player.orig_SuperJump superJump, Player player) {
         superJump(player);
-        player.DestroyCrumbleBlockOnJump(GetGravityDirection());
-        player.DestroyCrumbleJumpThruOnJump();
+
+        var gravityDirection = GetGravityDirection();
+
+        player.DestroyCrumbleBlockOnJump(gravityDirection);
+
+        if (gravityDirection.Y > 0f)
+            player.DestroyCrumbleJumpThruOnJump();
     }
 
     private static void Player_WallJump(On.Celeste.Player.orig_WallJump wallJump, Player player, int dir) {

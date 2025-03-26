@@ -9,6 +9,7 @@ return {
 			delay = 0.2,
 			texture = "wood",
 			permanent = false,
+			createDebris = true,
 			width = 8,
 			surfaceIndex = -1
 		}
@@ -20,7 +21,8 @@ return {
 		"delay",
 		"texture",
 		"surfaceIndex",
-		"permanent"
+		"permanent",
+		"createDebris"
 	},
 	fieldInformation = {
         delay = {fieldType = "number", minimumValue = 0 },

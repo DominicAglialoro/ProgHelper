@@ -9,13 +9,15 @@ namespace Celeste.Mod.ProgHelper;
 public class CrumbleJumpThruOnJump : JumpthruPlatform {
     public bool Triggered;
 
-    private float delay;
-    private bool permanent;
-    private EntityID id;
+    private readonly float delay;
+    private readonly bool permanent;
+    private readonly bool createDebris;
+    private readonly EntityID id;
 
     public CrumbleJumpThruOnJump(EntityData data, Vector2 offset, EntityID id) : base(data, offset) {
         delay = data.Float("delay");
         permanent = data.Bool("permanent");
+        createDebris = data.Bool("createDebris");
         this.id = id;
 
         if (delay >= 0f)
@@ -31,9 +33,11 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
         Audio.Play(SFX.game_10_quake_rockbreak, Position);
         Collidable = false;
 
-        for (int i = 0; i < Width; i += 8) {
-            if (!Scene.CollideCheck<Solid>(new Rectangle((int) X + i, (int) Y, 8, 8)))
-                Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(i + 4, 4), '9', true).BlastFrom(TopCenter));
+        if (createDebris) {
+            for (int i = 0; i < Width; i += 8) {
+                if (!Scene.CollideCheck<Solid>(new Rectangle((int) X + i, (int) Y, 8, 8)))
+                    Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(i + 4, 4), '9', true).BlastFrom(TopCenter));
+            }
         }
 
         if (permanent)

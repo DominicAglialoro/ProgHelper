@@ -43,8 +43,8 @@ public class ThrowablePortal : Actor {
     private float time;
     private Vector2 previousLiftSpeed;
     private Level level;
-    private Image body;
-    private Particle[] particles;
+    private readonly Image body;
+    private readonly Particle[] particles;
     private bool waitForNewPress = true;
     private bool hasSpawned;
 
@@ -133,7 +133,7 @@ public class ThrowablePortal : Actor {
         if (!Input.GrabCheck)
             waitForNewPress = false;
 
-        if (!Hold.IsHeld || Hold.Holder.StateMachine.State != 8) {
+        if (!Hold.IsHeld || Hold.Holder.StateMachine.State != Player.StPickup) {
             foreach (var entity in Scene.Tracker.GetEntities<SeekerBarrier>()) {
                 entity.Collidable = true;
 
@@ -192,7 +192,7 @@ public class ThrowablePortal : Actor {
 
         var player = Scene.Tracker.GetEntity<Player>();
 
-        if (player != null && player.StateMachine.State == 2 && player.DashDir == Vector2.Zero && Hold.Check(player)) {
+        if (player != null && player.StateMachine.State == Player.StDash && player.DashDir == Vector2.Zero && Hold.Check(player)) {
             Hold.CheckAgainstColliders();
 
             return;

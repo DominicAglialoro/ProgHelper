@@ -6,10 +6,10 @@ namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/tilePulseController"), Tracked]
 public class TilePulseController : Entity {
-    private float baseBrightness;
-    private float pulseInterval;
-    private float pulseLength;
-    private float pulseSpeed;
+    private readonly float baseBrightness;
+    private readonly float pulseInterval;
+    private readonly float pulseLength;
+    private readonly float pulseSpeed;
 
     public TilePulseController(EntityData data, Vector2 offset) : base(data.Position + offset) {
         baseBrightness = data.Float("baseBrightness");
