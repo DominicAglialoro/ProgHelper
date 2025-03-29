@@ -23,13 +23,13 @@ public static class LevelExtensions {
     };
 
     public static void Load() {
-        // On.Celeste.Level.LoadLevel += Level_LoadLevel;
-        // IL.Celeste.Level.Render += Level_Render_il;
+        On.Celeste.Level.LoadLevel += Level_LoadLevel;
+        IL.Celeste.Level.Render += Level_Render_il;
     }
 
     public static void Unload() {
-        // On.Celeste.Level.LoadLevel -= Level_LoadLevel;
-        // IL.Celeste.Level.Render -= Level_Render_il;
+        On.Celeste.Level.LoadLevel -= Level_LoadLevel;
+        IL.Celeste.Level.Render -= Level_Render_il;
     }
 
     private static void RenderInvertMask(Level level) {
@@ -54,7 +54,7 @@ public static class LevelExtensions {
         Draw.SpriteBatch.End();
     }
 
-    private static void GenerateSolidTiles(this Level level) {
+    private static void GenerateNegativeSpaceSolids(this Level level) {
         var bgTiles = level.BgTiles;
         int width = bgTiles.Tiles.Tiles.Columns;
         int height = bgTiles.Tiles.Tiles.Rows;
@@ -86,9 +86,9 @@ public static class LevelExtensions {
 
     private static void Level_LoadLevel(On.Celeste.Level.orig_LoadLevel loadLevel, Level level, Player.IntroTypes playerintro, bool isfromloader) {
         if (level.Tracker.GetEntity<NegativeSpaceSolid>() != null) {
-            Logger.Log(LogLevel.Info, "ProgHelper", "Existing tiles found");
+            Logger.Log(LogLevel.Info, "ProgHelper", "Existing NegativeSpaceSolids found");
             loadLevel(level, playerintro, isfromloader);
-            level.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap();
+            level.Tracker.GetEntity<NegativeSpaceController>()?.InitSolids();
 
             return;
         }
@@ -99,14 +99,14 @@ public static class LevelExtensions {
             if (entity.Name != "progHelper/negativeSpaceController")
                 continue;
 
-            level.GenerateSolidTiles();
-            Logger.Log(LogLevel.Info, "ProgHelper", "Generating new tiles");
+            level.GenerateNegativeSpaceSolids();
+            Logger.Log(LogLevel.Info, "ProgHelper", "Generating new NegativeSpaceSolids");
 
             break;
         }
 
         loadLevel(level, playerintro, isfromloader);
-        level.Tracker.GetEntity<NegativeSpaceController>()?.CheckForSwap();
+        level.Tracker.GetEntity<NegativeSpaceController>()?.InitSolids();
     }
 
     private static void Level_Render_il(ILContext il) {

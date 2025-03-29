@@ -27,6 +27,8 @@ entities.progHelper/crumbleJumpThruOnJump.placements.name.default=Crumble Jump T
 entities.progHelper/crumbleJumpThruOnJump.placements.description.default=Jump through that breaks after a delay when touched, or immediately when the player jumps off it
 entities.progHelper/crumbleJumpThruOnJump.attributes.description.delay=How long to wait to break after being touched. Set to a negative number to only break when the player jumps
 
+entities.progHelper/tileInvertEffectController.placements.name.default=Tile Invert Effect Controller
+
 entities.progHelper/tilePulseController.placements.name.default=Tile Pulse Controller
 entities.progHelper/tilePulseController.placements.description.default=Configures parameters for the tile pulse effect
 entities.progHelper/tilePulseController.attributes.description.pulseSpeed=The number of tiles a pulse propagates through per second. Set to 0 to have all tiles pulse at the same time

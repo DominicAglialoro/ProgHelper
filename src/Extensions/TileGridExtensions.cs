@@ -18,12 +18,12 @@ public static class TileGridExtensions {
     };
 
     public static void Load() {
-        // On.Monocle.TileGrid.RenderAt += TileGrid_RenderAt;
+        On.Monocle.TileGrid.RenderAt += TileGrid_RenderAt;
         IL.Monocle.TileGrid.RenderAt += TileGrid_RenderAt_il;
     }
 
     public static void Unload() {
-        // On.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt;
+        On.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt;
         IL.Monocle.TileGrid.RenderAt -= TileGrid_RenderAt_il;
     }
 

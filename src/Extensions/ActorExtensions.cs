@@ -6,22 +6,25 @@ namespace Celeste.Mod.ProgHelper;
 
 public static class ActorExtensions {
     public static void Load() {
-        // On.Celeste.Actor.NaiveMove += Actor_NaiveMove;
+        On.Celeste.Actor.NaiveMove += Actor_NaiveMove;
         IL.Celeste.Actor.MoveHExact += Il_Actor_MoveHExact;
         IL.Celeste.Actor.MoveVExact += Il_Actor_MoveVExact;
     }
 
     public static void Unload() {
-        // On.Celeste.Actor.NaiveMove -= Actor_NaiveMove;
+        On.Celeste.Actor.NaiveMove -= Actor_NaiveMove;
         IL.Celeste.Actor.MoveHExact -= Il_Actor_MoveHExact;
         IL.Celeste.Actor.MoveVExact -= Il_Actor_MoveVExact;
     }
 
     private static void Actor_NaiveMove(On.Celeste.Actor.orig_NaiveMove naiveMove, Actor actor, Vector2 amount) {
-        naiveMove(actor, amount);
+        if (actor is not Player player || player.StateMachine.State != Player.StDreamDash) {
+            naiveMove(actor, amount);
 
-        if (actor is not Player player || player.StateMachine.State != Player.StDreamDash)
             return;
+        }
+
+        naiveMove(actor, amount);
 
         var controller = player.Scene.Tracker.GetEntity<NegativeSpaceController>();
 

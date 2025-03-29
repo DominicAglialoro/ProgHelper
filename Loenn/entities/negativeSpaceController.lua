@@ -3,7 +3,6 @@ return {
 	placements = {
 		name = "default",
 		data = {
-			backgroundInvertsColor = false,
 			flipsGravity = false,
 			_gravityHelper = true
 		}
