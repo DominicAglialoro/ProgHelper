@@ -17,7 +17,7 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
     public CrumbleJumpThruOnJump(EntityData data, Vector2 offset, EntityID id) : base(data, offset) {
         delay = data.Float("delay");
         permanent = data.Bool("permanent");
-        createDebris = data.Bool("createDebris");
+        createDebris = data.Bool("createDebris", true);
         this.id = id;
 
         if (delay >= 0f)

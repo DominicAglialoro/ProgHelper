@@ -27,7 +27,7 @@ public class CrumbleBlockOnJump : Solid {
         permanent = data.Bool("permanent");
         blendIn = data.Bool("blendIn");
         destroyStaticMovers = data.Bool("destroyStaticMovers");
-        createDebris = data.Bool("createDebris");
+        createDebris = data.Bool("createDebris", true);
 
         this.id = id;
         Depth = blendIn ? -10501 : -12999;
