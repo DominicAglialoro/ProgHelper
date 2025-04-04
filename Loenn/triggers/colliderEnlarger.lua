@@ -7,7 +7,9 @@ return {
 			hitboxRight = 0,
 			hitboxTop = 0,
 			hitboxBottom = 0,
-			circleRadius = 0
+			circleRadius = 0,
+			resizePickupCollider = false,
+			entityTypes = ""
 		}
 	},
 	fieldOrder = {
@@ -19,6 +21,8 @@ return {
 		"hitboxRight",
 		"hitboxTop",
 		"hitboxBottom",
-		"circleRadius"
+		"circleRadius",
+		"resizePickupCollider",
+		"entityTypes"
 	}
 }

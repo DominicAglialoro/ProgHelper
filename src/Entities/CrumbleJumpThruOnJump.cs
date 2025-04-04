@@ -35,9 +35,22 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
             SolidChecker = solid => CollideCheck(solid, Position - Vector2.UnitX) || CollideCheck(solid, Position + Vector2.UnitX),
             OnAttach = platform => Depth = platform.Depth + 1,
             OnMove = OnMove,
-            OnShake = OnShake
+            OnShake = OnShake,
+            OnDestroy = Break
         };
         Add(staticMover);
+    }
+
+    public override void Awake(Scene scene) {
+        base.Awake(scene);
+
+        foreach (StaticMover other in scene.Tracker.GetComponents<StaticMover>()) {
+            if (other.Platform != null || !other.IsRiding(this))
+                continue;
+
+            staticMovers.Add(other);
+            other.OnAttach?.Invoke(this);
+        }
     }
 
     public override void Update() {
@@ -103,6 +116,7 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
         if (permanent)
             SceneAs<Level>().Session.DoNotLoad.Add(id);
 
+        DestroyStaticMovers();
         RemoveSelf();
     }
 

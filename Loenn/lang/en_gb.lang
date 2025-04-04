@@ -65,20 +65,26 @@ triggers.progHelper/clipPreventionTrigger.attributes.description.right=Whether t
 triggers.progHelper/clipPreventionTrigger.attributes.description.up=Whether this trigger should prevent clipping when the player is moving up
 triggers.progHelper/clipPreventionTrigger.attributes.description.down=Whether this trigger should prevent clipping when the player is moving down
 triggers.progHelper/clipPreventionTrigger.attributes.description.applyToEntities=Applies this trigger's effects to entities positioned within it, instead of the trigger itself
+triggers.progHelper/clipPreventionTrigger.attributes.description.applyToPickupColliders=Applies this trigger's effects to the pickup colliders of positioned within it, instead of the trigger itself
+triggers.progHelper/clipPreventionTrigger.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
 
-triggers.progHelper/colliderEnlarger.placements.name.default=Collider Enlarger
+triggers.progHelper/colliderEnlarger.placements.name.default=Collider Resizer
 triggers.progHelper/colliderEnlarger.placements.description.default=Alters the size of colliders of entities inside the trigger, when the level is loaded
 triggers.progHelper/colliderEnlarger.attributes.description.hitboxLeft=The amount to extend a hitbox collider to the left
-triggers.progHelper/colliderEnlarger.attributes.description.hitboxRight=The amount to extend a hitbox collider to the left
+triggers.progHelper/colliderEnlarger.attributes.description.hitboxRight=The amount to extend a hitbox collider to the right
 triggers.progHelper/colliderEnlarger.attributes.description.hitboxTop=The amount to extend a hitbox collider upward
 triggers.progHelper/colliderEnlarger.attributes.description.hitboxBottom=The amount to extend a hitbox collider downward
 triggers.progHelper/colliderEnlarger.attributes.description.circleRadius=The amount to increase a circle collider's radius
+triggers.progHelper/colliderEnlarger.attributes.description.resizePickupCollider=Resize the pickup collider of a holdable entity instead of the entity's own collider
+triggers.progHelper/colliderEnlarger.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/disableCoyoteJumpTrigger.placements.name.default=Disable Coyote Jump Trigger
 triggers.progHelper/disableCoyoteJumpTrigger.placements.description.default=Clears the player's coyote time and prevents the player from gaining coyote time while inside the trigger
 
 triggers.progHelper/setPlayerSpeedTrigger.placements.name.default=Set Player Speed Trigger
 triggers.progHelper/setPlayerSpeedTrigger.placements.description.default=Immediately sets the player's speed when entered
+triggers.progHelper/setPlayerSpeedTrigger.attributes.description.modeX=Specifies when the speed should be applied on the X axis
+triggers.progHelper/setPlayerSpeedTrigger.attributes.description.modeY=Specifies when the speed should be applied on the Y axis
 
 triggers.progHelper/speedCameraOffsetTrigger.placements.name.default=Speed Camera Offset Trigger
 triggers.progHelper/speedCameraOffsetTrigger.placements.description.default=Sets the camera offset based on the player's current speed
