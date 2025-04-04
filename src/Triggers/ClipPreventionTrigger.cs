@@ -61,7 +61,7 @@ public class ClipPreventionTrigger : Entity {
                 || entityTypes != null && !entityTypes.Contains(entity.GetType().FullName))
                 continue;
 
-            if (applyToEntities && entity.Collider != null)
+            if (applyToEntities)
                 ApplyToCollider(entity, entity.Collider);
 
             if (applyToPickupColliders)

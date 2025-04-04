@@ -31,7 +31,7 @@ public class ClipPrevention : Component {
         foreach (var component in triggers) {
             var trigger = (ClipPrevention) component;
 
-            if ((trigger.right && player.Speed.X > 0f || trigger.left && player.Speed.X < 0f) && !player.Collider.Collide(trigger.collider))
+            if ((trigger.right && player.Speed.X > 0f || trigger.left && player.Speed.X < 0f) && !trigger.collider.Collide(player.Collider))
                 triggersToCheck.Add(trigger);
         }
     }
@@ -45,7 +45,7 @@ public class ClipPrevention : Component {
         foreach (var component in triggers) {
             var trigger = (ClipPrevention) component;
 
-            if ((trigger.up && player.Speed.Y < 0f || trigger.down && player.Speed.Y > 0f) && !player.Collider.Collide(trigger.collider))
+            if ((trigger.up && player.Speed.Y < 0f || trigger.down && player.Speed.Y > 0f) && !trigger.collider.Collide(player.Collider))
                 triggersToCheck.Add(trigger);
         }
     }
@@ -63,12 +63,12 @@ public class ClipPrevention : Component {
         foreach (var trigger in triggersToCheck) {
             var triggerCollider = trigger.collider;
 
-            if (!collider.Collide(triggerCollider))
+            if (!triggerCollider.Collide(collider))
                 continue;
 
             actor.Position = at;
 
-            if (!collider.Collide(triggerCollider)) {
+            if (!triggerCollider.Collide(collider)) {
                 actor.Position = position;
 
                 return true;
