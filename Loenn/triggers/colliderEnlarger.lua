@@ -1,7 +1,8 @@
 return {
-	name = "progHelper/colliderEnlarger",
+	name = "progHelper/colliderResizer",
 	placements = {
 		name = "default",
+		alternativeName = "colliderEnlarger",
 		data = {
 			hitboxLeft = 0,
 			hitboxRight = 0,
@@ -22,7 +23,7 @@ return {
 		"hitboxTop",
 		"hitboxBottom",
 		"circleRadius",
-		"resizePickupCollider",
-		"entityTypes"
+		"entityTypes",
+		"resizePickupCollider"
 	}
 }

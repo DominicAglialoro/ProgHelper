@@ -1,10 +1,10 @@
 local modeOptions = {
 	fieldType = "string",
 	options = {
-		["Always"] = "Always",
-		["Never"] = "Never",
-		["In Range"] = "InRange",
-		["Both in Range"] = "BothInRange"
+		{ "Always", "Always" },
+		{ "Never", "Never" },
+		{ "In Range", "InRange" },
+		{ "Both in Range", "BothInRange" }
 	},
 	editable = false
 }

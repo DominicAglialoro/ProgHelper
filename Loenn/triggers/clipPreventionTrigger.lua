@@ -7,7 +7,7 @@ return {
 			left = true,
 			up = true,
 			down = true,
-			applyToEntites = false,
+			applyToEntities = false,
 			applyToPickupColliders = false,
 			entityTypes = ""
 		}

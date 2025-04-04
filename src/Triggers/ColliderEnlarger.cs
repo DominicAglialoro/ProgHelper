@@ -7,7 +7,7 @@ using Monocle;
 
 namespace Celeste.Mod.ProgHelper;
 
-[CustomEntity("progHelper/colliderEnlarger")]
+[CustomEntity("progHelper/colliderEnlarger", "progHelper/colliderResizer")]
 public class ColliderEnlarger : Entity {
     private readonly float hitboxLeft;
     private readonly float hitboxRight;
