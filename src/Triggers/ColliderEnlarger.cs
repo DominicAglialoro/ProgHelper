@@ -8,7 +8,7 @@ using Monocle;
 namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/colliderEnlarger", "progHelper/colliderResizer")]
-public class ColliderEnlarger : Entity {
+public class ColliderEnlarger : Trigger {
     private readonly float hitboxLeft;
     private readonly float hitboxRight;
     private readonly float hitboxTop;
@@ -19,7 +19,7 @@ public class ColliderEnlarger : Entity {
     private readonly float width;
     private readonly float height;
 
-    public ColliderEnlarger(EntityData data, Vector2 offset) : base(data.Position + offset) {
+    public ColliderEnlarger(EntityData data, Vector2 offset) : base(data, offset) {
         hitboxLeft = data.Float("hitboxLeft");
         hitboxRight = data.Float("hitboxRight");
         hitboxTop = data.Float("hitboxTop");
@@ -45,6 +45,9 @@ public class ColliderEnlarger : Entity {
         base.Awake(scene);
 
         foreach (var entity in scene.Entities) {
+            if (entity is Trigger)
+                continue;
+
             var relativePosition = entity.Position - Position;
 
             if (relativePosition.X < 0f || relativePosition.X > width || relativePosition.Y < 0f || relativePosition.Y > height

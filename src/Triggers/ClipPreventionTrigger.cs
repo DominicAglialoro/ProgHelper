@@ -7,7 +7,7 @@ using Monocle;
 namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/clipPreventionTrigger")]
-public class ClipPreventionTrigger : Entity {
+public class ClipPreventionTrigger : Trigger {
     private readonly bool right;
     private readonly bool left;
     private readonly bool up;
@@ -18,7 +18,7 @@ public class ClipPreventionTrigger : Entity {
     private readonly float width;
     private readonly float height;
 
-    public ClipPreventionTrigger(EntityData data, Vector2 offset) : base(data.Position + offset) {
+    public ClipPreventionTrigger(EntityData data, Vector2 offset) : base(data, offset) {
         right = data.Bool("right");
         left = data.Bool("left");
         up = data.Bool("up");
@@ -52,7 +52,7 @@ public class ClipPreventionTrigger : Entity {
             return;
 
         foreach (var entity in scene.Entities) {
-            if (entity is Solid)
+            if (entity is Solid or Trigger)
                 continue;
 
             var relativePosition = entity.Position - Position;
