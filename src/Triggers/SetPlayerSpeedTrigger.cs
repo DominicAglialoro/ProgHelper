@@ -18,7 +18,7 @@ public class SetPlayerSpeedTrigger : Trigger {
         modeX = data.Enum<SetPlayerSpeedMode>("modeX");
         modeY = data.Enum<SetPlayerSpeedMode>("modeY");
         speedX = data.Float("speedX");
-        speedY = data.Float("speedX");
+        speedY = data.Float("speedY");
         rangeXMin = data.Float("rangeXMin");
         rangeXMax = data.Float("rangeXMax");
         rangeYMin = data.Float("rangeYMin");
