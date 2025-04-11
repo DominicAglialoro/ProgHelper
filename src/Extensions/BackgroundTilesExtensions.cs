@@ -26,6 +26,5 @@ public static class BackgroundTilesExtensions {
         var tileTypes = DynamicData.For(backgroundTiles).Get<VirtualMap<char>>("tileTypes");
 
         backgroundTiles.Tiles.GeneratePulseIndices(tileTypes, true);
-        backgroundTiles.Tiles.GenerateInvertMask(tileTypes);
     }
 }

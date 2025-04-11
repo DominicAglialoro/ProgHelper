@@ -13,11 +13,6 @@
 		"Effects/*",
 		"Graphics/*",
 		"Loenn/*",
-		"Maps/*",
 		"Tutorials/*"
-	],
-	"exclude": [
-		"Loenn/entities/negativeSpaceController.lua",
-		"Loenn/entities/tileInvertEffectController.lua",
 	]
 }
