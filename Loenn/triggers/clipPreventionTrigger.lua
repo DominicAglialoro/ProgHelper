@@ -7,7 +7,9 @@ return {
 			left = true,
 			up = true,
 			down = true,
-			applyToEntites = false
+			applyToEntities = false,
+			applyToPickupColliders = false,
+			entityTypes = ""
 		}
 	},
 	fieldOrder = {
@@ -19,6 +21,8 @@ return {
 		"right",
 		"up",
 		"down",
-		"applyToEntities"
+		"applyToEntities",
+		"applyToPickupColliders",
+		"entityTypes"
 	}
 }

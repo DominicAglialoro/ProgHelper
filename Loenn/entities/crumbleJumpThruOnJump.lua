@@ -8,6 +8,7 @@ return {
 		data = {
 			delay = 0.2,
 			texture = "wood",
+			attached = false,
 			permanent = false,
 			createDebris = true,
 			width = 8,
@@ -21,6 +22,7 @@ return {
 		"delay",
 		"texture",
 		"surfaceIndex",
+		"attached",
 		"permanent",
 		"createDebris"
 	},

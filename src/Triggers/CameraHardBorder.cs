@@ -6,7 +6,7 @@ using Monocle;
 namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/cameraHardBorder"), Tracked]
-public class CameraHardBorder : Entity {
+public class CameraHardBorder : Trigger {
     private readonly bool left;
     private readonly bool right;
     private readonly bool top;
@@ -14,7 +14,7 @@ public class CameraHardBorder : Entity {
     private readonly string flag;
     private readonly bool inverted;
 
-    public CameraHardBorder(EntityData data, Vector2 offset) : base(data.Position + offset) {
+    public CameraHardBorder(EntityData data, Vector2 offset) : base(data, offset) {
         left = data.Bool("left");
         right = data.Bool("right");
         top = data.Bool("top");

@@ -31,7 +31,7 @@ public class ClipPrevention : Component {
         foreach (var component in triggers) {
             var trigger = (ClipPrevention) component;
 
-            if ((trigger.right && player.Speed.X > 0f || trigger.left && player.Speed.X < 0f) && !player.Collider.Collide(trigger.collider))
+            if (trigger.Entity.Collidable && (trigger.right && player.Speed.X > 0f || trigger.left && player.Speed.X < 0f) && !trigger.CollideCheck(player))
                 triggersToCheck.Add(trigger);
         }
     }
@@ -45,7 +45,7 @@ public class ClipPrevention : Component {
         foreach (var component in triggers) {
             var trigger = (ClipPrevention) component;
 
-            if ((trigger.up && player.Speed.Y < 0f || trigger.down && player.Speed.Y > 0f) && !player.Collider.Collide(trigger.collider))
+            if (trigger.Entity.Collidable && (trigger.up && player.Speed.Y < 0f || trigger.down && player.Speed.Y > 0f) && !trigger.CollideCheck(player))
                 triggersToCheck.Add(trigger);
         }
     }
@@ -57,18 +57,15 @@ public class ClipPrevention : Component {
     public static bool CheckV(Actor actor, int dir) => Check(actor, actor.Position + dir * Vector2.UnitY);
 
     private static bool Check(Actor actor, Vector2 at) {
-        var collider = actor.Collider;
         var position = actor.Position;
 
         foreach (var trigger in triggersToCheck) {
-            var triggerCollider = trigger.collider;
-
-            if (!collider.Collide(triggerCollider))
+            if (!trigger.CollideCheck(actor))
                 continue;
 
             actor.Position = at;
 
-            if (!collider.Collide(triggerCollider)) {
+            if (!trigger.CollideCheck(actor)) {
                 actor.Position = position;
 
                 return true;
@@ -78,5 +75,17 @@ public class ClipPrevention : Component {
         }
 
         return false;
+    }
+
+    private bool CollideCheck(Actor actor) {
+        var entityCollider = Entity.Collider;
+
+        Entity.Collider = collider;
+
+        bool result = actor.CollideCheck(Entity);
+
+        Entity.Collider = entityCollider;
+
+        return result;
     }
 }
