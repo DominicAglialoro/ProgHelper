@@ -50,6 +50,9 @@ entities.progHelper/throwablePortalReceptacle.placements.name.default=Throwable 
 entities.progHelper/throwablePortalReceptacle.placements.name.atomReceptacle=Atom Receptacle
 entities.progHelper/throwablePortalReceptacle.placements.description.default=Opens a nearby temple gate when activated by a throwable portal
 
+entities.progHelper/waterfallBg.placements.name.default=Waterfall (BG)
+entities.progHelper/waterfallBg.placements.description.default=Waterfall that renders behind entities and does not render displacement
+
 triggers.progHelper/cameraConstraintTrigger.placements.name.default=Camera Constraint Trigger
 triggers.progHelper/cameraConstraintTrigger.placements.description.default=Sets a strict boundary on how far the camera can move ahead of or behind the player
 triggers.progHelper/cameraConstraintTrigger.attributes.description.minX=Leftmost point that the camera is allowed to move, in camera offset units
@@ -83,6 +86,11 @@ triggers.progHelper/colliderResizer.attributes.description.entityTypes=Supply a 
 
 triggers.progHelper/disableCoyoteJumpTrigger.placements.name.default=Disable Coyote Jump Trigger
 triggers.progHelper/disableCoyoteJumpTrigger.placements.description.default=Clears the player's coyote time and prevents the player from gaining coyote time while inside the trigger
+
+triggers.progHelper/onlyLoadIfFlagTrigger.placements.description.default=Immediately deletes an entity on room load if a flag is not set
+triggers.progHelper/onlyLoadIfFlagTrigger.placements.name.default=Only Load if Flag Trigger
+triggers.progHelper/onlyLoadIfFlagTrigger.attributes.description.invert=Delete the entity is the flag is set instead
+triggers.progHelper/onlyLoadIfFlagTrigger.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/setPlayerSpeedTrigger.placements.name.default=Set Player Speed Trigger
 triggers.progHelper/setPlayerSpeedTrigger.placements.description.default=Immediately sets the player's speed when entered
