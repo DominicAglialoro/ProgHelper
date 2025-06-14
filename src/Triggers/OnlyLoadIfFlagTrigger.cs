@@ -30,28 +30,31 @@ public class OnlyLoadIfFlagTrigger : Trigger {
         }
 
         Visible = false;
+        Depth = -1;
     }
 
-    public override void Awake(Scene scene) {
-        base.Awake(scene);
+    public override void Update() {
+        base.Update();
 
-        if (SceneAs<Level>().Session.GetFlag(flag) == invert) {
+        Scene.OnEndOfFrame += () => {
+            if (Scene == null || SceneAs<Level>().Session.GetFlag(flag) != invert) {
+                RemoveSelf();
+
+                return;
+            }
+
+            foreach (var entity in Scene.Entities) {
+                if (entity is Trigger)
+                    continue;
+
+                var relativePosition = entity.Position - Position;
+
+                if (relativePosition.X >= 0f && relativePosition.X <= width && relativePosition.Y >= 0f && relativePosition.Y <= height
+                    && (entityTypes == null || entityTypes.Contains(entity.GetType().FullName)))
+                    entity.RemoveSelf();
+            }
+
             RemoveSelf();
-
-            return;
-        }
-
-        foreach (var entity in scene.Entities) {
-            if (entity is Trigger)
-                continue;
-
-            var relativePosition = entity.Position - Position;
-
-            if (relativePosition.X >= 0f && relativePosition.X <= width && relativePosition.Y >= 0f && relativePosition.Y <= height
-                && (entityTypes == null || entityTypes.Contains(entity.GetType().FullName)))
-                entity.RemoveSelf();
-        }
-
-        RemoveSelf();
+        };
     }
 }

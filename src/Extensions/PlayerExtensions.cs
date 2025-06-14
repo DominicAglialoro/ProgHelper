@@ -188,7 +188,13 @@ public static class PlayerExtensions {
 
     private static void Player_ClimbJump(On.Celeste.Player.orig_ClimbJump climbJump, Player player) {
         climbJump(player);
-        player.DestroyCrumbleBlockOnJump(3 * (int) Input.MoveX * Vector2.UnitX);
+
+        int dir = (int) Input.MoveX;
+
+        if (dir == 0)
+            dir = (int) player.Facing;
+
+        player.DestroyCrumbleBlockOnJump(3 * dir * Vector2.UnitX);
     }
 
     private static void Player_SuperWallJump(On.Celeste.Player.orig_SuperWallJump superWallJump, Player player, int dir) {
