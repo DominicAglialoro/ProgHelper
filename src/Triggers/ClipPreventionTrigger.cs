@@ -12,6 +12,7 @@ public class ClipPreventionTrigger : Trigger {
     private readonly bool left;
     private readonly bool up;
     private readonly bool down;
+    private readonly bool useHurtbox;
     private readonly bool applyToEntities;
     private readonly bool applyToPickupColliders;
     private readonly HashSet<string> entityTypes;
@@ -23,6 +24,7 @@ public class ClipPreventionTrigger : Trigger {
         left = data.Bool("left");
         up = data.Bool("up");
         down = data.Bool("down");
+        useHurtbox = data.Bool("useHurtbox");
         applyToEntities = data.Bool("applyToEntities");
         applyToPickupColliders = data.Bool("applyToPickupColliders");
         width = data.Width;
@@ -30,7 +32,7 @@ public class ClipPreventionTrigger : Trigger {
 
         if (!applyToEntities && !applyToPickupColliders) {
             Collider = new Hitbox(width, height);
-            Add(new ClipPrevention(right, left, up, down, Collider));
+            Add(new ClipPrevention(right, left, up, down, useHurtbox, Collider));
         }
 
         string entityTypesAttr = data.Attr("entityTypes");
@@ -73,6 +75,6 @@ public class ClipPreventionTrigger : Trigger {
 
     private void ApplyToCollider(Entity entity, Collider collider) {
         if (collider != null)
-            entity.Add(new ClipPrevention(right, left, up, down, collider));
+            entity.Add(new ClipPrevention(right, left, up, down, useHurtbox, collider));
     }
 }

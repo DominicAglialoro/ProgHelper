@@ -6,20 +6,6 @@ namespace Celeste.Mod.ProgHelper;
 
 [Tracked]
 public class ClipPrevention : Component {
-    private readonly bool right;
-    private readonly bool left;
-    private readonly bool up;
-    private readonly bool down;
-    private readonly Collider collider;
-
-    public ClipPrevention(bool right, bool left, bool up, bool down, Collider collider) : base(true, false) {
-        this.right = right;
-        this.left = left;
-        this.up = up;
-        this.down = down;
-        this.collider = collider;
-    }
-
     private static List<ClipPrevention> triggersToCheck = new();
 
     public static void BeginTestH(Player player) {
@@ -57,24 +43,49 @@ public class ClipPrevention : Component {
     public static bool CheckV(Actor actor, int dir) => Check(actor, actor.Position + dir * Vector2.UnitY);
 
     private static bool Check(Actor actor, Vector2 at) {
-        var position = actor.Position;
+        if (triggersToCheck.Count == 0 || actor is not Player player)
+            return false;
+
+        var collider = player.Collider;
+        var position = player.Position;
 
         foreach (var trigger in triggersToCheck) {
-            if (!trigger.CollideCheck(actor))
+            player.Collider = trigger.useHurtbox ? player.hurtbox : collider;
+
+            if (!trigger.CollideCheck(player))
                 continue;
 
-            actor.Position = at;
+            player.Position = at;
 
-            if (!trigger.CollideCheck(actor)) {
-                actor.Position = position;
+            if (!trigger.CollideCheck(player)) {
+                player.Collider = collider;
+                player.Position = position;
 
                 return true;
             }
 
-            actor.Position = position;
+            player.Position = position;
         }
 
+        player.Collider = collider;
+
         return false;
+    }
+
+    private readonly bool right;
+    private readonly bool left;
+    private readonly bool up;
+    private readonly bool down;
+    private readonly bool useHurtbox;
+    private readonly Collider collider;
+
+    public ClipPrevention(bool right, bool left, bool up, bool down, bool useHurtbox, Collider collider) : base(true, false) {
+        this.right = right;
+        this.left = left;
+        this.up = up;
+        this.down = down;
+        this.useHurtbox = useHurtbox;
+        this.collider = collider;
     }
 
     private bool CollideCheck(Actor actor) {

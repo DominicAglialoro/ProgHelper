@@ -3,7 +3,7 @@
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
         <CelestePath>..\..\..</CelestePath>
-        <TargetFramework>net7</TargetFramework>
+        <TargetFramework>net8</TargetFramework>
         <OutputPath>bin</OutputPath>
         <PackageId>ProgHelper</PackageId>
         <RootNamespace>ProgHelper</RootNamespace>

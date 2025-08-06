@@ -12,6 +12,7 @@ public static class PlayerExtensions {
     private static ILHook il_Celeste_Player_orig_Update;
 
     public static void Load() {
+        On.Celeste.Player.Update += Player_Update;
         il_Celeste_Player_orig_Update = typeof(Player).CreateHook(nameof(Player.orig_Update), Player_orig_Update_il);
         On.Celeste.Player.WallJumpCheck += Player_WallJumpCheck;
         On.Celeste.Player.Jump += Player_Jump;
@@ -27,6 +28,7 @@ public static class PlayerExtensions {
     }
 
     public static void Unload() {
+        On.Celeste.Player.Update -= Player_Update;
         il_Celeste_Player_orig_Update.Dispose();
         On.Celeste.Player.WallJumpCheck -= Player_WallJumpCheck;
         On.Celeste.Player.Jump -= Player_Jump;
@@ -105,6 +107,13 @@ public static class PlayerExtensions {
         var portal = player.Scene.Tracker.GetEntity<ThrowablePortal>();
 
         return portal != null && portal.TryUseWarp(player);
+    }
+
+    private static void Player_Update(On.Celeste.Player.orig_Update update, Player player) {
+        StrictPlayerCollider.BeginTest(player);
+        update(player);
+        StrictPlayerCollider.Check(player);
+        StrictPlayerCollider.EndTest();
     }
 
     private static void Player_orig_Update_il(ILContext il) {

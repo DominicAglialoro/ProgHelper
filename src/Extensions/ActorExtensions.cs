@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
+using Monocle;
 using MonoMod.Cil;
 
 namespace Celeste.Mod.ProgHelper;
@@ -31,6 +31,10 @@ public static class ActorExtensions {
         cursor.Emit(OpCodes.Ldc_I4_0);
         cursor.Emit(OpCodes.Ret);
         cursor.MarkLabel(label);
+
+        cursor.GotoNext(MoveType.After, instr => instr.MatchCall<Entity>("set_X"));
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.EmitCall(StrictPlayerCollider.Check);
     }
 
     private static void Il_Actor_MoveVExact(ILContext il) {
@@ -49,5 +53,9 @@ public static class ActorExtensions {
         cursor.Emit(OpCodes.Ldc_I4_0);
         cursor.Emit(OpCodes.Ret);
         cursor.MarkLabel(label);
+
+        cursor.GotoNext(MoveType.After, instr => instr.MatchCall<Entity>("set_Y"));
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.EmitCall(StrictPlayerCollider.Check);
     }
 }

@@ -42,6 +42,15 @@ entities.progHelper/linearIntroCrusher.attributes.description.easingPeriod=Fract
 
 entities.progHelper/negativeSpaceController.placements.name.default=Negative Space Controller
 
+entities.progHelper/strictSpikesUp.placements.name.up_default=Strict Spikes (Up)
+entities.progHelper/strictSpikesDown.placements.name.down_default=Strict Spikes (Down)
+entities.progHelper/strictSpikesLeft.placements.name.left_default=Strict Spikes (Left)
+entities.progHelper/strictSpikesRight.placements.name.right_default=Strict Spikes (Right)
+entities.progHelper/strictSpikesUp.placements.description.up_default=Spikes with strict collision detection that prevents the player from clipping through them
+entities.progHelper/strictSpikesDown.placements.description.down_default=Spikes with strict collision detection that prevents the player from clipping through them
+entities.progHelper/strictSpikesLeft.placements.description.left_default=Spikes with strict collision detection that prevents the player from clipping through them
+entities.progHelper/strictSpikesRight.placements.description.right_default=Spikes with strict collision detection that prevents the player from clipping through them
+
 entities.progHelper/throwablePortal.placements.name.default=Throwable Portal
 entities.progHelper/throwablePortal.placements.name.atom=Atom
 entities.progHelper/throwablePortal.placements.description.default=Throwable entity that you teleport to when pressing grab
