@@ -35,6 +35,13 @@ public static class ActorExtensions {
         cursor.GotoNext(MoveType.After, instr => instr.MatchCall<Entity>("set_X"));
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(StrictPlayerCollider.Check);
+
+        label = cursor.DefineLabel();
+
+        cursor.Emit(OpCodes.Brfalse_S, label);
+        cursor.Emit(OpCodes.Ldc_I4_0);
+        cursor.Emit(OpCodes.Ret);
+        cursor.MarkLabel(label);
     }
 
     private static void Il_Actor_MoveVExact(ILContext il) {
@@ -57,5 +64,12 @@ public static class ActorExtensions {
         cursor.GotoNext(MoveType.After, instr => instr.MatchCall<Entity>("set_Y"));
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitCall(StrictPlayerCollider.Check);
+
+        label = cursor.DefineLabel();
+
+        cursor.Emit(OpCodes.Brfalse_S, label);
+        cursor.Emit(OpCodes.Ldc_I4_0);
+        cursor.Emit(OpCodes.Ret);
+        cursor.MarkLabel(label);
     }
 }

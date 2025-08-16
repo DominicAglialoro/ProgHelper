@@ -26,4 +26,39 @@ public class StrictSpikes : Spikes {
         Remove(pc);
         Add(new StrictPlayerCollider(OnCollide));
     }
+
+    public new bool OnCollide(Player player) {
+        switch (Direction) {
+            case Directions.Up:
+                if (player.Speed.Y < 0f || player.Bottom > Bottom)
+                    return false;
+
+                player.Die(new Vector2(0f, -1f));
+
+                return true;
+            case Directions.Down:
+                if (player.Speed.Y > 0f)
+                    return false;
+
+                player.Die(new Vector2(0f, 1f));
+
+                return true;
+            case Directions.Left:
+                if (player.Speed.X < 0f)
+                    return false;
+
+                player.Die(new Vector2(-1f, 0f));
+
+                return true;
+            case Directions.Right:
+                if (player.Speed.X > 0f)
+                    return false;
+
+                player.Die(new Vector2(1f, 0f));
+
+                return true;
+            default:
+                return false;
+        }
+    }
 }

@@ -113,5 +113,8 @@ triggers.progHelper/speedCameraOffsetTrigger.attributes.description.speedToX=The
 triggers.progHelper/speedCameraOffsetTrigger.attributes.description.speedFromY=The Y speed at which OffsetFromY is used
 triggers.progHelper/speedCameraOffsetTrigger.attributes.description.speedToY=The Y speed at which OffsetToY is used
 
+triggers.progHelper/strictCollisionModifier.placements.name.default=Strict Collision Modifier
+triggers.progHelper/strictCollisionModifier.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
+
 triggers.progHelper/wavedashProtectionTrigger.placements.name.default=Wavedash Protection Trigger
 triggers.progHelper/wavedashProtectionTrigger.placements.description.default=Prevents the player from wall jumping during a down-diagonal dash

@@ -20,11 +20,12 @@ public class StrictPlayerCollider : Component {
 
     public static void EndTest() => collidersToCheck.Clear();
 
-    public static void Check(Actor actor) {
+    public static bool Check(Actor actor) {
         if (collidersToCheck.Count == 0 || actor is not Player player || player.Dead || player.StateMachine.State == Player.StCassetteFly)
-            return;
+            return false;
 
         var playerCollider = player.Collider;
+        bool shouldStop = false;
 
         player.Collider = player.hurtbox;
 
@@ -34,15 +35,16 @@ public class StrictPlayerCollider : Component {
             if (!player.CollideCheck(collider.Entity))
                 continue;
 
-            Logger.Info("ProgHelper", $"Overlap. {player.Speed.X:F2}, {player.Speed.Y:F2}");
-            collider.OnCollide(player);
+            shouldStop |= collider.OnCollide(player);
             collidersToCheck.RemoveAt(i);
         }
 
         player.Collider = playerCollider;
+
+        return shouldStop;
     }
 
-    public Action<Player> OnCollide;
+    public Func<Player, bool> OnCollide;
 
-    public StrictPlayerCollider(Action<Player> onCollide) : base(true, false) => OnCollide = onCollide;
+    public StrictPlayerCollider(Func<Player, bool> onCollide) : base(true, false) => OnCollide = onCollide;
 }
