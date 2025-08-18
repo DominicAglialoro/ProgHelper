@@ -15,8 +15,6 @@ public class ColliderEnlarger : Trigger {
     private readonly float circleRadius;
     private readonly HashSet<string> entityTypes;
     private readonly bool resizePickupCollider;
-    private readonly float width;
-    private readonly float height;
 
     public ColliderEnlarger(EntityData data, Vector2 offset) : base(data, offset) {
         hitboxLeft = data.Float("hitboxLeft");
@@ -25,31 +23,15 @@ public class ColliderEnlarger : Trigger {
         hitboxBottom = data.Float("hitboxBottom");
         circleRadius = data.Float("circleRadius");
         resizePickupCollider = data.Bool("resizePickupCollider");
-        width = data.Width;
-        height = data.Height;
-
-        string entityTypesAttr = data.Attr("entityTypes");
-
-        if (!string.IsNullOrWhiteSpace(entityTypesAttr)) {
-            entityTypes = new HashSet<string>();
-
-            foreach (string sub in entityTypesAttr.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                entityTypes.Add(sub);
-        }
-
-        Visible = false;
+        entityTypes = data.Set("entityTypes");
     }
 
     public override void Awake(Scene scene) {
         base.Awake(scene);
 
         foreach (var entity in scene.Entities) {
-            if (entity is Trigger)
-                continue;
-
-            var relativePosition = entity.Position - Position;
-
-            if (relativePosition.X < 0f || relativePosition.X > width || relativePosition.Y < 0f || relativePosition.Y > height
+            if (entity is Trigger or SolidTiles or BackgroundTiles
+                || !this.ContainsEntity(entity)
                 || entityTypes != null && !entityTypes.Contains(entity.GetType().FullName))
                 continue;
 

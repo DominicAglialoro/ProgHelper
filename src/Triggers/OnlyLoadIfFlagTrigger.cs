@@ -10,25 +10,11 @@ public class OnlyLoadIfFlagTrigger : Trigger {
     private readonly string flag;
     private readonly bool invert;
     private readonly HashSet<string> entityTypes;
-    private readonly float width;
-    private readonly float height;
 
     public OnlyLoadIfFlagTrigger(EntityData data, Vector2 offset) : base(data, offset) {
         flag = data.Attr("flag");
         invert = data.Bool("invert");
-        width = data.Width;
-        height = data.Height;
-
-        string entityTypesAttr = data.Attr("entityTypes");
-
-        if (!string.IsNullOrWhiteSpace(entityTypesAttr)) {
-            entityTypes = new HashSet<string>();
-
-            foreach (string sub in entityTypesAttr.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                entityTypes.Add(sub);
-        }
-
-        Visible = false;
+        entityTypes = data.Set("entityTypes");
         Depth = -1;
     }
 
@@ -43,12 +29,8 @@ public class OnlyLoadIfFlagTrigger : Trigger {
             }
 
             foreach (var entity in Scene.Entities) {
-                if (entity is Trigger)
-                    continue;
-
-                var relativePosition = entity.Position - Position;
-
-                if (relativePosition.X >= 0f && relativePosition.X <= width && relativePosition.Y >= 0f && relativePosition.Y <= height
+                if (entity is not Trigger or SolidTiles or BackgroundTiles
+                    && this.ContainsEntity(entity)
                     && (entityTypes == null || entityTypes.Contains(entity.GetType().FullName)))
                     entity.RemoveSelf();
             }
