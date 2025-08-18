@@ -35,7 +35,9 @@ public class StrictPlayerCollider : Component {
             if (!player.CollideCheck(collider.Entity))
                 continue;
 
-            shouldStop |= collider.OnCollide(player);
+            if (collider.OnCollide(player))
+                shouldStop = true;
+
             collidersToCheck.RemoveAt(i);
         }
 
