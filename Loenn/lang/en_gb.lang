@@ -54,6 +54,9 @@ entities.progHelper/strictSpikesRight.placements.description.right_default=Spike
 entities.progHelper/strictSpring.placements.name.default=Strict Spring (Up)
 entities.progHelper/strictWallSpringLeft.placements.name.default=Strict Spring (Right)
 entities.progHelper/strictWallSpringRight.placements.name.default=Strict Spring (Left)
+entities.progHelper/strictSpring.placements.description.default=Spring with strict collision detection that prevents the player from clipping through it
+entities.progHelper/strictWallSpringLeft.placements.description.default=Spring with strict collision detection that prevents the player from clipping through it
+entities.progHelper/strictWallSpringRight.placements.description.default=Spring with strict collision detection that prevents the player from clipping through it
 
 entities.progHelper/throwablePortal.placements.name.default=Throwable Portal
 entities.progHelper/throwablePortal.placements.name.atom=Atom
@@ -118,6 +121,7 @@ triggers.progHelper/speedCameraOffsetTrigger.attributes.description.speedFromY=T
 triggers.progHelper/speedCameraOffsetTrigger.attributes.description.speedToY=The Y speed at which OffsetToY is used
 
 triggers.progHelper/strictCollisionModifier.placements.name.default=Strict Collision Modifier
+triggers.progHelper/strictCollisionModifier.placements.description.default=Modifies entities so that the player will interact with them even when clipping through them in a single frame
 triggers.progHelper/strictCollisionModifier.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/wavedashProtectionTrigger.placements.name.default=Wavedash Protection Trigger
