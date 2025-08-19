@@ -51,6 +51,10 @@ entities.progHelper/strictSpikesDown.placements.description.down_default=Spikes 
 entities.progHelper/strictSpikesLeft.placements.description.left_default=Spikes with strict collision detection that prevents the player from clipping through them
 entities.progHelper/strictSpikesRight.placements.description.right_default=Spikes with strict collision detection that prevents the player from clipping through them
 
+entities.progHelper/strictSpring.placements.name.default=Strict Spring (Up)
+entities.progHelper/strictWallSpringLeft.placements.name.default=Strict Spring (Right)
+entities.progHelper/strictWallSpringRight.placements.name.default=Strict Spring (Left)
+
 entities.progHelper/throwablePortal.placements.name.default=Throwable Portal
 entities.progHelper/throwablePortal.placements.name.atom=Atom
 entities.progHelper/throwablePortal.placements.description.default=Throwable entity that you teleport to when pressing grab
