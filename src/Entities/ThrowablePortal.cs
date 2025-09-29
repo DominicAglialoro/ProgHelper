@@ -271,6 +271,8 @@ public class ThrowablePortal : Actor {
         var playerPreviousCenter = player.Center;
         bool playerWasDucking = player.Ducking;
 
+        Position.X = (float) Math.Round(Position.X);
+        Position.Y = (float) Math.Round(Position.Y);
         SpikeNudge();
         player.Position = Position;
         player.Ducking = false;
