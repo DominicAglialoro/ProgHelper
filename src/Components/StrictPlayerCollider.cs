@@ -24,24 +24,30 @@ public class StrictPlayerCollider : Component {
         if (collidersToCheck.Count == 0 || actor is not Player player || player.Dead || player.StateMachine.State == Player.StCassetteFly)
             return false;
 
-        var playerCollider = player.Collider;
         bool shouldStop = false;
 
-        player.Collider = player.hurtbox;
-
-        for (int i = collidersToCheck.Count - 1; i >= 0; i--) {
+        for (int i = 0; i < collidersToCheck.Count; i++) {
             var collider = collidersToCheck[i];
 
-            if (!player.CollideCheck(collider.Entity))
+            if (collider == null)
                 continue;
+
+            var playerCollider = player.Collider;
+
+            player.Collider = player.hurtbox;
+
+            if (!player.CollideCheck(collider.Entity)) {
+                player.Collider = playerCollider;
+
+                continue;
+            }
+
+            player.Collider = playerCollider;
+            collidersToCheck[i] = null;
 
             if (collider.OnCollide(player))
                 shouldStop = true;
-
-            collidersToCheck.RemoveAt(i);
         }
-
-        player.Collider = playerCollider;
 
         return shouldStop;
     }
