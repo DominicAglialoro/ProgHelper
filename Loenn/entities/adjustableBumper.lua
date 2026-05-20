@@ -121,5 +121,6 @@ return {
 		}
 	},
 	nodeLimits = { 0, 1 },
+	nodeLineRenderType = "line",
 	texture = "objects/Bumper/Idle22"
 }

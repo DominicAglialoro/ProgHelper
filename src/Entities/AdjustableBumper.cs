@@ -46,7 +46,7 @@ public class AdjustableBumper : Entity {
 
         anchor = Position;
 
-        var node = data.FirstNodeNullable();
+        var node = data.FirstNodeNullable(offset);
 
         if (node.HasValue) {
             var start = Position;
