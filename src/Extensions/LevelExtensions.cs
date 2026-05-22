@@ -14,11 +14,14 @@ public static class LevelExtensions {
     private static void Level_TeleportTo(On.Celeste.Level.orig_TeleportTo teleportTo, Level level, Player player, string nextlevel, Player.IntroTypes introtype, Vector2? nearestspawn) {
         teleportTo(level, player, nextlevel, introtype, nearestspawn);
 
-        var teleportFacingTrigger = player.CollideFirst<TeleportFacingTrigger>();
+        if (level.Tracker.GetEntity<Player>() is not { } newPlayer)
+            return;
+
+        var teleportFacingTrigger = newPlayer.CollideFirst<TeleportFacingTrigger>();
 
         if (teleportFacingTrigger == null)
             return;
 
-        player.Facing = teleportFacingTrigger.Facing;
+        newPlayer.Facing = teleportFacingTrigger.Facing;
     }
 }
