@@ -1,3 +1,5 @@
+local progHelper = require("mods").requireFromPlugin("libraries.progHelper")
+
 return {
 	name = "progHelper/colliderResizer",
 	placements = {
@@ -25,5 +27,16 @@ return {
 		"circleRadius",
 		"entityTypes",
 		"resizePickupCollider"
-	}
+	},
+	fieldInformation = {
+        entityTypes = {
+            fieldType = "list",
+            elementSeparator = ",",
+            elementDefault = "",
+            elementOptions = {
+                options = function() return progHelper.getMapSIDs() end,
+                searchable = true
+            }
+        }
+    }
 }

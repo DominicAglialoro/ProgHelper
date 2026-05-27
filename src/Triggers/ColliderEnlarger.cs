@@ -31,7 +31,7 @@ public class ColliderEnlarger : Trigger {
         foreach (var entity in scene.Entities) {
             if (entity is Trigger or SolidTiles or BackgroundTiles
                 || !this.ContainsEntity(entity)
-                || entityTypes != null && !entityTypes.Contains(entity.GetType().FullName))
+                || entityTypes != null && !entityTypes.ContainsEntityType(entity))
                 continue;
 
             if (resizePickupCollider)

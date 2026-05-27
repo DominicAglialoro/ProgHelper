@@ -17,7 +17,7 @@ public class StrictCollisionModifier : Trigger {
         foreach (var entity in scene.Entities) {
             if (entity is Platform or Trigger or BackgroundTiles
                 || !this.ContainsEntity(entity)
-                || entityTypes != null && !entityTypes.Contains(entity.GetType().FullName))
+                || entityTypes != null && !entityTypes.ContainsEntityType(entity))
                 continue;
 
             var playerCollider = entity.Components.Get<PlayerCollider>();

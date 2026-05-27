@@ -6,6 +6,7 @@ using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
+using Celeste.Mod.Registry;
 
 namespace Celeste.Mod.ProgHelper;
 
@@ -26,6 +27,15 @@ public static class Util {
             return null;
 
         return new HashSet<string>(attr.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+    }
+
+    public static bool ContainsEntityType(this HashSet<string> entityTypeSet, Entity entity) {
+        Type type = entity.GetType();
+
+        return entityTypeSet.Contains(type.FullName)
+               || (entity.SourceData?.Name is { } sourceSid
+                   ? entityTypeSet.Contains(sourceSid)
+                   : entityTypeSet.Overlaps(EntityRegistry.GetKnownSidsFromType(type)));
     }
 
     public static bool ContainsEntity(this Trigger trigger, Entity entity) => ((Hitbox) trigger.Collider).Collide(entity.Position);
