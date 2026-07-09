@@ -27,21 +27,13 @@ public class ClipPreventionTrigger : Trigger {
         useHurtbox = data.Bool("useHurtbox");
         applyToEntities = data.Bool("applyToEntities");
         applyToPickupColliders = data.Bool("applyToPickupColliders");
+        entityTypes = data.Set("entityTypes");
         width = data.Width;
         height = data.Height;
 
         if (!applyToEntities && !applyToPickupColliders) {
             Collider = new Hitbox(width, height);
             Add(new ClipPrevention(right, left, up, down, useHurtbox, Collider));
-        }
-
-        string entityTypesAttr = data.Attr("entityTypes");
-
-        if (!string.IsNullOrWhiteSpace(entityTypesAttr)) {
-            entityTypes = new HashSet<string>();
-
-            foreach (string sub in entityTypesAttr.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-                entityTypes.Add(sub);
         }
 
         Visible = false;
@@ -60,7 +52,7 @@ public class ClipPreventionTrigger : Trigger {
             var relativePosition = entity.Position - Position;
 
             if (relativePosition.X < 0f || relativePosition.X > width || relativePosition.Y < 0f || relativePosition.Y > height
-                || entityTypes != null && !entityTypes.Contains(entity.GetType().FullName))
+                || entityTypes != null && !entityTypes.ContainsEntityType(entity))
                 continue;
 
             if (applyToEntities)

@@ -1,3 +1,5 @@
+local progHelper = require("mods").requireFromPlugin("libraries.progHelper")
+
 return {
 	name = "progHelper/clipPreventionTrigger",
 	placements = {
@@ -24,5 +26,16 @@ return {
 		"applyToEntities",
 		"applyToPickupColliders",
 		"entityTypes"
-	}
+	},
+	fieldInformation = {
+        entityTypes = {
+            fieldType = "list",
+            elementSeparator = ",",
+            elementDefault = "",
+            elementOptions = {
+                options = function() return progHelper.getMapSIDs() end,
+                searchable = true
+            }
+        }
+    }
 }

@@ -30,7 +30,7 @@ public class OnlyLoadIfFlagTrigger : Trigger {
             foreach (var entity in Scene.Entities) {
                 if (entity is not Trigger or SolidTiles or BackgroundTiles
                     && this.ContainsEntity(entity)
-                    && (entityTypes == null || entityTypes.Contains(entity.GetType().FullName)))
+                    && (entityTypes == null || entityTypes.ContainsEntityType(entity)))
                     entity.RemoveSelf();
             }
 

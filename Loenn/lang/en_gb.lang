@@ -87,7 +87,7 @@ triggers.progHelper/clipPreventionTrigger.attributes.description.up=Whether this
 triggers.progHelper/clipPreventionTrigger.attributes.description.down=Whether this trigger should prevent clipping when the player is moving down
 triggers.progHelper/clipPreventionTrigger.attributes.description.applyToEntities=Applies this trigger's effects to entities positioned within it, instead of the trigger itself
 triggers.progHelper/clipPreventionTrigger.attributes.description.applyToPickupColliders=Applies this trigger's effects to the pickup colliders of entities positioned within it, instead of the trigger itself
-triggers.progHelper/clipPreventionTrigger.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
+triggers.progHelper/clipPreventionTrigger.attributes.description.entityTypes=Supply a comma-separated list of entity SIDs or fully-qualified type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/colliderResizer.placements.name.default=Collider Resizer
 triggers.progHelper/colliderResizer.placements.name.colliderEnlarger=Collider Resizer
@@ -98,7 +98,7 @@ triggers.progHelper/colliderResizer.attributes.description.hitboxTop=The amount 
 triggers.progHelper/colliderResizer.attributes.description.hitboxBottom=The amount to extend a hitbox collider downward
 triggers.progHelper/colliderResizer.attributes.description.circleRadius=The amount to increase a circle collider's radius
 triggers.progHelper/colliderResizer.attributes.description.resizePickupCollider=Resize the pickup collider of a holdable entity instead of the entity's own collider
-triggers.progHelper/colliderResizer.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
+triggers.progHelper/colliderResizer.attributes.description.entityTypes=Supply a comma-separated list of entity SIDs or fully-qualified type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/disableCoyoteJumpTrigger.placements.name.default=Disable Coyote Jump Trigger
 triggers.progHelper/disableCoyoteJumpTrigger.placements.description.default=Clears the player's coyote time and prevents the player from gaining coyote time while inside the trigger
@@ -106,7 +106,7 @@ triggers.progHelper/disableCoyoteJumpTrigger.placements.description.default=Clea
 triggers.progHelper/onlyLoadIfFlagTrigger.placements.description.default=Immediately deletes an entity on room load if a flag is not set
 triggers.progHelper/onlyLoadIfFlagTrigger.placements.name.default=Only Load if Flag Trigger
 triggers.progHelper/onlyLoadIfFlagTrigger.attributes.description.invert=Delete the entity is the flag is set instead
-triggers.progHelper/onlyLoadIfFlagTrigger.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
+triggers.progHelper/onlyLoadIfFlagTrigger.attributes.description.entityTypes=Supply a comma-separated list of entity SIDs or fully-qualified type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/setPlayerSpeedTrigger.placements.name.default=Set Player Speed Trigger
 triggers.progHelper/setPlayerSpeedTrigger.placements.description.default=Immediately sets the player's speed when entered
@@ -122,7 +122,7 @@ triggers.progHelper/speedCameraOffsetTrigger.attributes.description.speedToY=The
 
 triggers.progHelper/strictCollisionModifier.placements.name.default=Strict Collision Modifier
 triggers.progHelper/strictCollisionModifier.placements.description.default=Modifies entities so that the player will interact with them even when clipping through them in a single frame
-triggers.progHelper/strictCollisionModifier.attributes.description.entityTypes=Supply a comma-separated list of fully-qualified entity type names to restrict applying this trigger to entities of those types
+triggers.progHelper/strictCollisionModifier.attributes.description.entityTypes=Supply a comma-separated list of entity SIDs or fully-qualified type names to restrict applying this trigger to entities of those types
 
 triggers.progHelper/teleportFacingTrigger.placements.name.default=Teleport Facing Trigger
 triggers.progHelper/teleportFacingTrigger.placements.description.default=Makes the player face a direction when teleporting to a spawn point under this trigger
