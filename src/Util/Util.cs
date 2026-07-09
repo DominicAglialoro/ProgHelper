@@ -30,7 +30,7 @@ public static class Util {
     }
 
     public static bool ContainsEntityType(this HashSet<string> entityTypeSet, Entity entity) {
-        Type type = entity.GetType();
+        var type = entity.GetType();
 
         return entityTypeSet.Contains(type.FullName)
                || (entity.SourceData?.Name is { } sourceSid
