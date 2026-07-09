@@ -1,18 +1,17 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper;
 
 [CustomEntity("progHelper/cameraConstraintTrigger")]
 public class CameraConstraintTrigger : Trigger {
-    private readonly CameraConstraints constraints;
+    private readonly CameraConstraints.Parameters constraints;
     private readonly bool onlyOnce;
     private readonly string flag;
     private readonly bool inverted;
 
     public CameraConstraintTrigger(EntityData data, Vector2 offset) : base(data, offset) {
-        constraints = new CameraConstraints {
+        constraints = new CameraConstraints.Parameters {
             HasMinX = data.Bool("hasMinX"),
             HasMaxX = data.Bool("hasMaxX"),
             HasMinY = data.Bool("hasMinY"),
@@ -34,7 +33,14 @@ public class CameraConstraintTrigger : Trigger {
         if (!Util.CheckFlag(flag, SceneAs<Level>().Session, inverted))
             return;
 
-        DynamicData.For(player).Set("programmatic.ProgHelper.CameraConstraints", constraints);
+        var cameraConstraints = player.Components.Get<CameraConstraints>();
+
+        if (cameraConstraints == null) {
+            cameraConstraints = new CameraConstraints();
+            player.Add(cameraConstraints);
+        }
+
+        cameraConstraints.Constraints = constraints;
 
         if (onlyOnce)
             RemoveSelf();

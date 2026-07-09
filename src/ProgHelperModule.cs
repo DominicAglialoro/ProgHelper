@@ -25,7 +25,7 @@ public class ProgHelperModule : EverestModule {
 
     public override void Load() {
         ActorExtensions.Load();
-        BackgroundTilesExtensions.Unload();
+        BackgroundTilesExtensions.Load();
         LevelExtensions.Load();
         PlayerExtensions.Load();
         SolidTilesExtensions.Load();

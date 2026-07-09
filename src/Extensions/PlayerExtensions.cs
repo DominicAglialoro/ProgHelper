@@ -4,7 +4,6 @@ using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
-using MonoMod.Utils;
 
 namespace Celeste.Mod.ProgHelper;
 
@@ -63,31 +62,34 @@ public static class PlayerExtensions {
 
     private static Vector2 ApplyCameraConstraints(Vector2 value, Player player, Vector2 cameraTarget) {
         var bounds = player.SceneAs<Level>().Bounds;
+        var cameraConstraints = player.Components.Get<CameraConstraints>();
 
-        if (DynamicData.For(player).TryGet("programmatic.ProgHelper.CameraConstraints", out CameraConstraints cameraConstraints)) {
-            if (cameraConstraints.HasMinX) {
-                value.X = Math.Max(value.X, player.Position.X + cameraConstraints.MinX - 160f);
+        if (cameraConstraints != null) {
+            var constraints = cameraConstraints.Constraints;
+
+            if (constraints.HasMinX) {
+                value.X = Math.Max(value.X, player.Position.X + constraints.MinX - 160f);
 
                 if (player.EnforceLevelBounds)
                     value.X = Math.Min(value.X, Math.Max(bounds.Right - 320f, cameraTarget.X));
             }
 
-            if (cameraConstraints.HasMaxX) {
-                value.X = Math.Min(value.X, player.Position.X + cameraConstraints.MaxX - 160f);
+            if (constraints.HasMaxX) {
+                value.X = Math.Min(value.X, player.Position.X + constraints.MaxX - 160f);
 
                 if (player.EnforceLevelBounds)
                     value.X = Math.Max(value.X, Math.Min(bounds.Left, cameraTarget.X));
             }
 
-            if (cameraConstraints.HasMinY) {
-                value.Y = Math.Max(value.Y, player.Position.Y + cameraConstraints.MinY - 90f);
+            if (constraints.HasMinY) {
+                value.Y = Math.Max(value.Y, player.Position.Y + constraints.MinY - 90f);
 
                 if (player.EnforceLevelBounds)
                     value.Y = Math.Min(value.Y, Math.Max(bounds.Bottom - 180f, cameraTarget.Y));
             }
 
-            if (cameraConstraints.HasMaxY) {
-                value.Y = Math.Min(value.Y, player.Position.Y + cameraConstraints.MaxY - 90f);
+            if (constraints.HasMaxY) {
+                value.Y = Math.Min(value.Y, player.Position.Y + constraints.MaxY - 90f);
 
                 if (player.EnforceLevelBounds)
                     value.Y = Math.Max(value.Y, Math.Min(bounds.Top, cameraTarget.Y));
