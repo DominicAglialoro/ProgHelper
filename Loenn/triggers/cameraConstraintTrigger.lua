@@ -11,6 +11,7 @@ return {
 			maxX = 0,
 			minY = 0,
 			maxY = 0,
+			smoothing = 0,
 			onlyOnce = false,
 			flag = "",
 			inverted = false
@@ -29,6 +30,7 @@ return {
 		"hasMaxX",
 		"hasMinY",
 		"hasMaxY",
+		"smoothing",
 		"flag",
 		"inverted",
 		"onlyOnce"
