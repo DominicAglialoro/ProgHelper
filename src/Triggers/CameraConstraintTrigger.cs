@@ -42,27 +42,7 @@ public class CameraConstraintTrigger : Trigger {
         }
 
         cameraConstraints.TargetConstraints = constraints;
-        cameraConstraints.MinX = constraints.MinX;
-        cameraConstraints.MaxX = constraints.MaxX;
-        cameraConstraints.MinY = constraints.MinY;
-        cameraConstraints.MaxY = constraints.MaxY;
-
-        if (constraints.Smoothing > 0f) {
-            var camera = player.level.Camera;
-            var relativePosition = camera.Position - player.Position;
-
-            if (constraints.HasMinX && relativePosition.X < constraints.MinX)
-                cameraConstraints.MinX = relativePosition.X;
-
-            if (constraints.HasMaxX && relativePosition.X > constraints.MaxX)
-                cameraConstraints.MaxX = relativePosition.X;
-
-            if (constraints.HasMinY && relativePosition.Y < constraints.MinY)
-                cameraConstraints.MinY = relativePosition.Y;
-
-            if (constraints.HasMaxY && relativePosition.Y > constraints.MaxY)
-                cameraConstraints.MaxY = relativePosition.Y;
-        }
+        cameraConstraints.UpdateSmoothConstraints(player.level.Camera.Position, player.Position);
 
         if (onlyOnce)
             RemoveSelf();

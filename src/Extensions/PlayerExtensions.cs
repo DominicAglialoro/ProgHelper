@@ -61,50 +61,15 @@ public static class PlayerExtensions {
     }
 
     private static Vector2 ApplyCameraConstraints(Vector2 value, Player player, Vector2 cameraTarget) {
-        var bounds = player.SceneAs<Level>().Bounds;
+        var bounds = player.level.Bounds;
         var cameraConstraints = player.Components.Get<CameraConstraints>();
 
         if (cameraConstraints != null) {
-            var targetConstraints = cameraConstraints.TargetConstraints;
+            value = cameraConstraints.Constrain(value, player.Position, cameraTarget);
 
-            if (targetConstraints.HasMinX) {
-                value.X = Math.Max(value.X, Math.Min(player.Position.X + cameraConstraints.MinX, cameraTarget.X));
-
-                if (player.EnforceLevelBounds)
-                    value.X = Math.Min(value.X, Math.Max(bounds.Right - 320f, cameraTarget.X));
-
-                if (targetConstraints.Smoothing > 0f)
-                    cameraConstraints.MinX = Math.Min(value.X - player.Position.X, targetConstraints.MinX);
-            }
-
-            if (targetConstraints.HasMaxX) {
-                value.X = Math.Min(value.X, Math.Max(player.Position.X + cameraConstraints.MaxX, cameraTarget.X));
-
-                if (player.EnforceLevelBounds)
-                    value.X = Math.Max(value.X, Math.Min(bounds.Left, cameraTarget.X));
-
-                if (targetConstraints.Smoothing > 0f)
-                    cameraConstraints.MaxX = Math.Max(value.X - player.Position.X, targetConstraints.MaxX);
-            }
-
-            if (targetConstraints.HasMinY) {
-                value.Y = Math.Max(value.Y, Math.Min(player.Position.Y + cameraConstraints.MinY, cameraTarget.Y));
-
-                if (player.EnforceLevelBounds)
-                    value.Y = Math.Min(value.Y, Math.Max(bounds.Bottom - 180f, cameraTarget.Y));
-
-                if (targetConstraints.Smoothing > 0f)
-                    cameraConstraints.MinY = Math.Min(value.Y - player.Position.Y, targetConstraints.MinY);
-            }
-
-            if (targetConstraints.HasMaxY) {
-                value.Y = Math.Min(value.Y, Math.Max(player.Position.Y + cameraConstraints.MaxY, cameraTarget.Y));
-
-                if (player.EnforceLevelBounds)
-                    value.Y = Math.Max(value.Y, Math.Min(bounds.Top, cameraTarget.Y));
-
-                if (targetConstraints.Smoothing > 0f)
-                    cameraConstraints.MaxY = Math.Max(value.Y - player.Position.Y, targetConstraints.MaxY);
+            if (player.EnforceLevelBounds) {
+                value.X = MathHelper.Clamp(value.X, Math.Min(bounds.Left, cameraTarget.X), Math.Max(bounds.Right - 320f, cameraTarget.X));
+                value.Y = MathHelper.Clamp(value.Y, Math.Min(bounds.Top, cameraTarget.Y), Math.Max(bounds.Bottom - 180f, cameraTarget.Y));
             }
         }
 
@@ -128,6 +93,7 @@ public static class PlayerExtensions {
         update(player);
         StrictPlayerCollider.Check(player);
         StrictPlayerCollider.EndTest();
+        player.Components.Get<CameraConstraints>()?.UpdateSmoothConstraints(player.level.Camera.Position, player.Position);
     }
 
     private static void Player_orig_Update_il(ILContext il) {

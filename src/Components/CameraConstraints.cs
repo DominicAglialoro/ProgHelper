@@ -19,31 +19,37 @@ public class CameraConstraints : Component {
 
     public Constraints TargetConstraints;
 
-    public float MinX;
-    public float MaxX;
-    public float MinY;
-    public float MaxY;
+    private float smoothMinX;
+    private float smoothMaxX;
+    private float smoothMinY;
+    private float smoothMaxY;
 
-    public CameraConstraints() : base(true, false) { }
+    public CameraConstraints() : base(false, false) { }
 
-    public override void Update() {
-        base.Update();
+    public void UpdateSmoothConstraints(Vector2 cameraPosition, Vector2 playerPosition) {
+        var relativePosition = cameraPosition - playerPosition;
 
-        if (TargetConstraints.Smoothing <= 0f)
-            return;
+        smoothMinX = Math.Min(relativePosition.X, TargetConstraints.MinX);
+        smoothMaxX = Math.Max(relativePosition.X, TargetConstraints.MaxX);
+        smoothMinY = Math.Min(relativePosition.Y, TargetConstraints.MinY);
+        smoothMaxY = Math.Max(relativePosition.Y, TargetConstraints.MaxY);
+    }
 
-        float t = (float) Math.Exp(-Engine.DeltaTime / TargetConstraints.Smoothing);
+    public Vector2 Constrain(Vector2 cameraPosition, Vector2 playerPosition, Vector2 cameraTarget) {
+        float t = TargetConstraints.Smoothing > 0f ? (float) Math.Exp(-Engine.DeltaTime / TargetConstraints.Smoothing) : 0f;
 
         if (TargetConstraints.HasMinX)
-            MinX = MathHelper.Lerp(TargetConstraints.MinX, MinX, t);
+            cameraPosition.X = Math.Max(cameraPosition.X, Math.Min(playerPosition.X + MathHelper.Lerp(TargetConstraints.MinX, smoothMinX, t), cameraTarget.X));
 
         if (TargetConstraints.HasMaxX)
-            MaxX = MathHelper.Lerp(TargetConstraints.MaxX, MaxX, t);
+            cameraPosition.X = Math.Min(cameraPosition.X, Math.Max(playerPosition.X + MathHelper.Lerp(TargetConstraints.MaxX, smoothMaxX, t), cameraTarget.X));
 
         if (TargetConstraints.HasMinY)
-            MinY = MathHelper.Lerp(TargetConstraints.MinY, MinY, t);
+            cameraPosition.Y = Math.Max(cameraPosition.Y, Math.Min(playerPosition.Y + MathHelper.Lerp(TargetConstraints.MinY, smoothMinY, t), cameraTarget.Y));
 
         if (TargetConstraints.HasMaxY)
-            MaxY = MathHelper.Lerp(TargetConstraints.MaxY, MaxY, t);
+            cameraPosition.Y = Math.Min(cameraPosition.Y, Math.Max(playerPosition.Y + MathHelper.Lerp(TargetConstraints.MaxY, smoothMaxY, t), cameraTarget.Y));
+
+        return cameraPosition;
     }
 }
