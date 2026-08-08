@@ -26,15 +26,17 @@ public static class LevelExtensions {
             return;
 
         var cameraPosition = level.Camera.Position;
-        var cameraTarget = player.CameraTarget;
-        var bounds = level.Bounds;
         var cameraConstraints = player.Components.Get<CameraConstraints>();
 
         if ((player.InControl || player.ForceCameraUpdate) && player.StateMachine.State != Player.StReflectionFall) {
             if (cameraConstraints != null) {
+                var cameraTarget = player.CameraTarget;
+
                 cameraPosition = cameraConstraints.Constrain(cameraPosition, player.Position, cameraTarget);
 
                 if (player.EnforceLevelBounds) {
+                    var bounds = level.Bounds;
+
                     cameraPosition.X = MathHelper.Clamp(cameraPosition.X, Math.Min(bounds.Left, cameraTarget.X), Math.Max(bounds.Right - 320f, cameraTarget.X));
                     cameraPosition.Y = MathHelper.Clamp(cameraPosition.Y, Math.Min(bounds.Top, cameraTarget.Y), Math.Max(bounds.Bottom - 180f, cameraTarget.Y));
                 }
