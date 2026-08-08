@@ -60,25 +60,6 @@ public static class PlayerExtensions {
             player.jumpGraceTimer = 0f;
     }
 
-    private static Vector2 ApplyCameraConstraints(Vector2 value, Player player, Vector2 cameraTarget) {
-        var bounds = player.level.Bounds;
-        var cameraConstraints = player.Components.Get<CameraConstraints>();
-
-        if (cameraConstraints != null) {
-            value = cameraConstraints.Constrain(value, player.Position, cameraTarget);
-
-            if (player.EnforceLevelBounds) {
-                value.X = MathHelper.Clamp(value.X, Math.Min(bounds.Left, cameraTarget.X), Math.Max(bounds.Right - 320f, cameraTarget.X));
-                value.Y = MathHelper.Clamp(value.Y, Math.Min(bounds.Top, cameraTarget.Y), Math.Max(bounds.Bottom - 180f, cameraTarget.Y));
-            }
-        }
-
-        foreach (CameraHardBorder entity in player.Scene.Tracker.GetEntities<CameraHardBorder>())
-            value = entity.Constrain(value, player);
-
-        return value;
-    }
-
     private static bool TryWarpToThrowablePortal(Player player) {
         if (player.StateMachine.State == Player.StDash && player.DashDir == Vector2.Zero || player.Holding != null || !Input.GrabCheck || player.IsTired)
             return false;
@@ -93,7 +74,6 @@ public static class PlayerExtensions {
         update(player);
         StrictPlayerCollider.Check(player);
         StrictPlayerCollider.EndTest();
-        player.Components.Get<CameraConstraints>()?.UpdateSmoothConstraints(player.level.Camera.Position, player.Position);
     }
 
     private static void Player_orig_Update_il(ILContext il) {
@@ -128,20 +108,6 @@ public static class PlayerExtensions {
         cursor.Index += 2;
 
         cursor.EmitCall(ClipPrevention.EndTest);
-
-        ILLabel label = null;
-
-        cursor.GotoNext(instr => instr.MatchLdfld<Player>("ForceCameraUpdate"));
-        cursor.GotoNext(
-            instr => instr.MatchCallvirt<StateMachine>("get_State"),
-            instr => instr.MatchLdcI4(Player.StReflectionFall));
-        cursor.GotoNext(instr => instr.MatchBneUn(out label));
-        cursor.GotoLabel(label);
-        cursor.GotoNext(instr => instr.MatchCallvirt<Camera>("set_Position"));
-
-        cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Ldloc_S, il.Body.Variables[12]);
-        cursor.EmitCall(ApplyCameraConstraints);
     }
 
     private static bool Player_WallJumpCheck(On.Celeste.Player.orig_WallJumpCheck wallJumpCheck, Player player, int dir) =>
