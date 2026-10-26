@@ -53,6 +53,12 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
         }
     }
 
+    public override void Removed(Scene scene) {
+        staticMover.Platform?.staticMovers.Remove(staticMover);
+
+        base.Removed(scene);
+    }
+
     public override void Update() {
         base.Update();
 
@@ -86,12 +92,16 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
                 if (!actor.IsRiding(this))
                     continue;
 
+                Collidable = false;
+
                 if (actor.TreatNaive)
                     actor.NaiveMove(Vector2.UnitX * move);
                 else
                     actor.MoveHExact(move);
 
                 actor.LiftSpeed = LiftSpeed;
+
+                Collidable = true;
             }
         }
 

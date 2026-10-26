@@ -1,9 +1,9 @@
 - Name: ProgHelper
-  Version: 1.5.7
+  Version: 1.5.9
   DLL: src/bin/net8/ProgHelper.dll
   Dependencies:
     - Name: Everest
-      Version: 1.6418.0
+      Version: 1.6642.0
   OptionalDependencies:
     - Name: VivHelper
       Version: 1.14.3
