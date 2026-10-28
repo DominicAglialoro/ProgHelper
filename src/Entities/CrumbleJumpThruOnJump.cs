@@ -10,7 +10,6 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
     public bool Triggered;
 
     private readonly float delay;
-    private readonly bool attached;
     private readonly bool permanent;
     private readonly bool createDebris;
     private readonly StaticMover staticMover;
@@ -20,7 +19,6 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
 
     public CrumbleJumpThruOnJump(EntityData data, Vector2 offset, EntityID id) : base(data, offset) {
         delay = data.Float("delay");
-        attached = data.Bool("attached");
         permanent = data.Bool("permanent");
         createDebris = data.Bool("createDebris", true);
         this.id = id;
@@ -28,7 +26,7 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
         if (delay >= 0f)
             Add(new Coroutine(Sequence()));
 
-        if (!attached)
+        if (!data.Bool("attached"))
             return;
 
         staticMover = new StaticMover {
@@ -54,7 +52,7 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
     }
 
     public override void Removed(Scene scene) {
-        staticMover.Platform?.staticMovers.Remove(staticMover);
+        staticMover?.Platform?.staticMovers.Remove(staticMover);
 
         base.Removed(scene);
     }
@@ -62,7 +60,7 @@ public class CrumbleJumpThruOnJump : JumpthruPlatform {
     public override void Update() {
         base.Update();
 
-        if (!attached)
+        if (staticMover is null)
             return;
 
         var player = GetPlayerRider();
